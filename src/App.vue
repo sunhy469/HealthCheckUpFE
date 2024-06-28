@@ -1,12 +1,8 @@
 <script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div>
-    <a-button type="primary">测试按钮</a-button>
-  </div>
+  <RouterView />
 </template>
-
-<style scoped>
-
-</style>
+<style scoped></style>
