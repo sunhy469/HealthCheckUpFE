@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { handleTest } from './api/home.ts';
+import test from './components/test.vue'
 
 const data = ref(null);
 
@@ -22,6 +23,8 @@ const fetchData = async () => {
     <a-button type="primary" @click="fetchData">测试按钮</a-button>
     <div v-if="data">{{ data }}</div>
   </div>
+
+  <test />
 </template>
 
 <style scoped>
