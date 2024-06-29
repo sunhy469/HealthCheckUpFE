@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const SigninView = () => import('../views/SigninView.vue')
 const MainView = () => import('../views/MainView.vue')
 const RegisterView = () => import('../views/RegisterView.vue')
+const UserInfo = () => import('../components/UserInfo.vue')
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,11 +19,23 @@ const router = createRouter({
         },
         {
             path: '/main',
+            alias: '/main',
             name: 'main',
             component: MainView,
             meta: {
-                title: '主页面'
-            }
+                title: '主页'
+            },
+            children: [
+                {
+                    path: 'userinfo',
+                    name: 'userinfo',
+                    alias: '/userinfo',
+                    component: UserInfo,
+                    meta: {
+                        title: '个人信息'
+                    }
+                }
+            ]
         },
         {
             path: '/register',
