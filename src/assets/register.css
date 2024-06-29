@@ -6,10 +6,22 @@
     font-family: Microsoft Yahei;
 }
 
-.register-form {
+.register-card {
+    width: 500px;
+    height: 400px; /* Adjust height to match login card */
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.register-container {
     margin-top: 30px;
     margin-left: 50px;
     margin-right: 50px;
+}
+
+.register-form {
+    margin-top: 0; /* Reset margin if necessary */
 }
 
 .register-form-button {

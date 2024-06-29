@@ -1,6 +1,6 @@
 <template>
   <h2 class="register-title">注册页面</h2>
-  <a-card style="width: 500px; height: 600px; position: relative; left: 33%">
+  <a-card style="width: 500px; height: 400px; position: relative; left: 33%">
     <div class="register-container">
       <a-form :model="formState" name="register_form" class="register-form" @finish="onFinish" @finishFailed="onFinishFailed">
         <a-form-item label="账号" name="username"
@@ -55,7 +55,7 @@
 import { reactive, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { UserOutlined, LockOutlined, PhoneOutlined } from '@ant-design/icons-vue';
-import '../assets/css/register.css';
+import '../assets/register.css';
 
 const { proxy } = getCurrentInstance();
 const router = useRouter();

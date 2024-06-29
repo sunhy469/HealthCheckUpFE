@@ -93,6 +93,7 @@
 <script lang="ts" setup>
 import {reactive, computed, getCurrentInstance, ref} from 'vue';
 import { useRouter } from 'vue-router';
+import '../assets/signin.css';
 
 const activeKey = ref('1');
 import {UserOutlined, LockOutlined} from '@ant-design/icons-vue';
@@ -191,31 +192,3 @@ const disabled2 = computed(() => {
   return !(formState.phonenumber && formState.verificationCode);
 });
 </script>
-
-<style scoped>
-.mybutton {
-  text-align: center;
-}
-
-.login-title {
-  color: #535bf2;
-  text-align: center;
-  margin: 100px 0 60px 0;
-  font-size: 36px;
-  font-family: Microsoft Yahei;
-}
-
-.login-form {
-  margin-top: 30px;
-  margin-left: 50px;
-  margin-right: 50px;
-}
-
-.login-form-forgot {
-  float: right;
-}
-
-.login-form-button {
-  width: 45%;
-}
-</style>
