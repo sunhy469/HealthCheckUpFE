@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 const SigninView = () => import('../views/SigninView.vue')
-
+const MainView = () => import('../views/MainView.vue')
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -11,6 +11,13 @@ const router = createRouter({
             component: SigninView,
             meta: {
                 title: '登录'
+            }
+        },{
+            path: '/main',
+            name: 'main',
+            component: MainView,
+            meta: {
+                title: '主页面'
             }
         }
     ]

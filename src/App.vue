@@ -2,12 +2,10 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { ref } from 'vue';
 import { handleTest } from './api/home.ts';
-import test from './components/test.vue'
 
 const data = ref(null);
 
 const fetchData = async () => {
-
   try {
     const response = await handleTest({
       id : 1
@@ -21,12 +19,7 @@ const fetchData = async () => {
 
 <template>
   <RouterView />
-  <div>
-    <a-button type="primary" @click="fetchData">测试按钮</a-button>
-    <div v-if="data">{{ data }}</div>
-  </div>
 
-  <test />
 </template>
 <style scoped></style>
 
