@@ -55,7 +55,7 @@
 import { reactive, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { UserOutlined, LockOutlined, PhoneOutlined } from '@ant-design/icons-vue';
-import '../assets/css/register.css';
+import '../assets/register.css';
 
 const { proxy } = getCurrentInstance();
 const router = useRouter();
