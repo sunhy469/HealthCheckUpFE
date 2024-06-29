@@ -1,5 +1,5 @@
 <template>
-    <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish" @finishFailed="onFinishFailed">
+    <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish" @finishFailed="onFinishFailed" >
         <a-form-item label="Username" name="username"
             :rules="[{ required: true, message: 'Please input your username!' }]">
             <a-input v-model:value="formState.username">
@@ -10,7 +10,7 @@
         </a-form-item>
 
         <a-form-item label="Password" name="password"
-            :rules="[{ required: true, message: 'Please input your password!' }]">
+            :rules="[{ required: true, message: '请输入验证码！' }]">
             <a-input-password v-model:value="formState.password">
                 <template #prefix>
                     <LockOutlined class="site-form-item-icon" />
@@ -59,15 +59,21 @@ const disabled = computed(() => {
 });
 </script>
 <style scoped>
-#components-form-demo-normal-login .login-form {
+.login-form {
     max-width: 300px;
+    width: 50%; /* or any other value */
+    position: absolute;
+    top: 60%;
+    left: 80%;
+    transform: translate(-50%, -90%);
+	/* background-color: blue; */
 }
 
-#components-form-demo-normal-login .login-form-forgot {
+.login-form-forgot {
     float: right;
 }
 
-#components-form-demo-normal-login .login-form-button {
+.login-form-button {
     width: 100%;
 }
 </style>
