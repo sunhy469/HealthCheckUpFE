@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 const SigninView = () => import('../views/SigninView.vue')
 const MainView = () => import('../views/MainView.vue')
+const RegisterView = () => import('../views/RegisterView.vue')
 const UserInfo = () => import('../components/UserInfo.vue')
 
 const router = createRouter({
@@ -34,14 +36,25 @@ const router = createRouter({
                     }
                 }
             ]
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: RegisterView,
+            meta: {
+                title: '注册'
+            }
         }
     ]
 })
 
 router.beforeEach((to, from, next) => {
     const currentUserString = sessionStorage.getItem('currentUser')
-    if (to.name !== 'main' && currentUserString == null) next({ path: '/main' })
-    else next()
+    if (to.name !== 'signin' && to.name !== 'register' && currentUserString == null) {
+        next({ path: '/signin' })
+    } else {
+        next()
+    }
     document.title = String(to.meta.title);
 })
 
