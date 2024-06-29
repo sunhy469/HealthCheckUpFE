@@ -1,0 +1,17 @@
+.register-title {
+    color: #535bf2;
+    text-align: center;
+    margin: 100px 0 60px 0;
+    font-size: 36px;
+    font-family: Microsoft Yahei;
+}
+
+.register-form {
+    margin-top: 30px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.register-form-button {
+    width: 100%;
+}
