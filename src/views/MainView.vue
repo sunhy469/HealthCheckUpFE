@@ -24,24 +24,24 @@
               <span>体检中心</span>
             </span>
           </template>
-          <a-menu-item key="3" v-if="currentUserObject.permission.id == 0">预约体检</a-menu-item>
-          <a-menu-item key="4" v-if="currentUserObject.permission.id == 0">体检记录</a-menu-item>
-          <a-menu-item key="5" v-if="currentUserObject.permission.id !=0">今日预约记录</a-menu-item>
-          <a-menu-item key="6" v-if="currentUserObject.permission.id !=0">管理体检记录</a-menu-item>
+          <a-menu-item key="3" v-if="roleid == 0">预约体检</a-menu-item>
+          <a-menu-item key="4" v-if="roleid == 0">体检记录</a-menu-item>
+          <a-menu-item key="5" v-if="roleid !=0">今日预约记录</a-menu-item>
+          <a-menu-item key="6" v-if="roleid !=0">管理体检记录</a-menu-item>
         </a-sub-menu>
-        <a-menu-item key="7" v-if="currentUserObject.permission.id == 0">
+        <a-menu-item key="7" v-if="roleid == 0">
           <contacts-outlined />
           <span>关于我们</span>
         </a-menu-item>
-        <a-sub-menu key="2" v-if="currentUserObject.permission.id !=0">
+        <a-sub-menu key="2" v-if="roleid !=0">
           <template #title>
             <span>
               <contacts-outlined />
               <span>账户管理</span>
             </span>
           </template>
-          <a-menu-item key="8" v-if="currentUserObject.permission.id == 1">患者信息</a-menu-item>
-          <a-menu-item key="9" v-if="currentUserObject.permission.id == 2">管理用户</a-menu-item>
+          <a-menu-item key="8" v-if="roleid == 1">患者信息</a-menu-item>
+          <a-menu-item key="9" v-if="roleid == 2">管理用户</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>
@@ -64,18 +64,16 @@ import {
   UserOutlined,
   ContactsOutlined
 } from '@ant-design/icons-vue';
-import { reactive } from 'vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
-const toComponentMethod = (subpath) => {
+const toComponentMethod = (subpath : any) => {
   router.push({ path: '/main' + subpath });
 }
 const collapsed = ref<boolean>(false);
 const selectedKeys = ref<string[]>(['1']);
-console.log(JSON.parse(sessionStorage.getItem('currentUser')))
 
-let currentUserObject = reactive(JSON.parse(sessionStorage.getItem('currentUser')) || { username: '未知', permission: { id: 2 } });
+let roleid = Number(localStorage.getItem('roleid'))
 
 </script>
 <style scoped>

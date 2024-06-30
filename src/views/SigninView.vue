@@ -132,15 +132,18 @@ const signinMethod = async () => {
       username: formState.username,
       password: formState.password
     });
+    console.log(data)
     if (data.code == 1 ) {
-      sessionStorage.setItem('currentUser', data);
+      sessionStorage.setItem("userid",data.id)
+      localStorage.setItem('userid', data.id)
+      localStorage.setItem('roleid', data.roleId)
       router.push({ path: '/main' });
-      proxy.$message.warning(`登录成功！`);
+      proxy.$message.success(`登录成功！`);
     } else {
       proxy.$message.warning(`无效的用户名或密码。`);
     }
   } catch (error) {
-    proxy.$message.warning(`系统繁忙。请稍后。`);
+    proxy.$message.error(`系统繁忙。请稍后。`);
   }
 };
 
