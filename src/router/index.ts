@@ -50,6 +50,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const currentUserString = sessionStorage.getItem('currentUser')
+    // console.log(currentUserString)
     if (to.name !== 'signin' && to.name !== 'register' && currentUserString == null) {
         next({ path: '/signin' })
     } else {

@@ -73,7 +73,10 @@ const toComponentMethod = (subpath) => {
 }
 const collapsed = ref<boolean>(false);
 const selectedKeys = ref<string[]>(['1']);
-let currentUserObject = reactive(JSON.parse(sessionStorage.getItem('currentUser')) || { name: '未知', permission: { id: 2 } });
+console.log(JSON.parse(sessionStorage.getItem('currentUser')))
+
+let currentUserObject = reactive(JSON.parse(sessionStorage.getItem('currentUser')) || { username: '未知', permission: { id: 2 } });
+
 </script>
 <style scoped>
 

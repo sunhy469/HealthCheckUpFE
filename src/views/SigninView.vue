@@ -7,7 +7,7 @@
           <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
                   @finishFailed="onFinishFailed">
             <a-form-item label="账号" name="username"
-                         :rules="[{ required: true, message: '请输入你的账号!' }]" @blur='checkMethodForUsername()'>
+                         :rules="[{ required: true, message: '请输入你的账号!' }]">
               <a-input v-model:value="formState.username">
                 <template #prefix>
                   <UserOutlined class="site-form-item-icon"/>
@@ -47,25 +47,25 @@
 
       <a-tab-pane key="2" tab="手机号登入">
         <div class="login-container">
-          <a-form :model="formState" name="phone_login" class="login-form" @finish="onFinish"
+          <a-form :model="formState" name="phone_login" class="login-form"
                   @finishFailed="onFinishFailed">
-            <a-form-item label="手机号" name="phonenumber"
-                         :rules="[{ required: true, message: '请输入你的手机号!' }]" @blur='checkMethodForPhoneNumber()'>
-              <a-input v-model:value="formState.phonenumber">
+            <a-form-item label="手机号" name="mobile"
+                         :rules="[{ required: true, message: '请输入你的手机号!' }]" @blur='checkMethodFormobile()'>
+              <a-input v-model:value="formState.mobile">
                 <template #prefix>
                   <UserOutlined class="site-form-item-icon"/>
                 </template>
               </a-input>
             </a-form-item>
 
-            <a-form-item label="验证码" name="verificationCode"
-                         :rules="[{ required: true, message: '请输入你的验证码!' }]" @blur='checkVerificationCode()'>
+            <a-form-item label="验证码" name="captcha"
+                         :rules="[{ required: true, message: '请输入你的验证码!' }]" @blur='checkcaptcha()'>
               <a-row gutter="8">
                 <a-col span="15">
-                  <a-input v-model:value="formState.verificationCode"/>
+                  <a-input v-model:value="formState.captcha"/>
                 </a-col>
                 <a-col span="9">
-                  <a-button @click="sendVerificationCode">发送验证码</a-button>
+                  <a-button @click="sendcaptcha">发送验证码</a-button>
                 </a-col>
               </a-row>
             </a-form-item>
@@ -79,7 +79,7 @@
                 登入
               </a-button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <a-button type="primary" html-type="submit" class="login-form-button">
+              <a-button type="primary" @click="goToRegister" html-type="submit" class="login-form-button">
                 注册
               </a-button>
             </a-form-item>
@@ -103,20 +103,20 @@ const goToRegister = () => {
 };
 
 const { proxy } = getCurrentInstance();
-const checkMethodForUsername = async () => {
-  try {
-    let { data: { code, msg } } = await proxy.$axios.post("doctor/checkUsername", 'username=' + formState.username);
-    if (code == 1 && msg == "INVALID") {
-      proxy.$message.info(`无效的用户名。`);
-    }
-  } catch (error) {
-    proxy.$message.warning(`系统繁忙。请稍后。`);
-  }
-};
+// const checkMethodForUsername = async () => {
+//   try {
+//     let { data: { code, msg } } = await proxy.$axios.post("user/checkUsername", 'username=' + formState.username);
+//     if (code == 1 && msg == "INVALID") {
+//       proxy.$message.info(`无效的用户名。`);
+//     }
+//   } catch (error) {
+//     proxy.$message.warning(`系统繁忙。请稍后。`);
+//   }
+// };
 
-const checkMethodForPhoneNumber = async () => {
+const checkMethodFormobile = async () => {
   try {
-    let { data: { code, msg } } = await proxy.$axios.post("doctor/checkPhoneNumber", 'phonenumber=' + formState.phonenumber);
+    let { data: { code, msg } } = await proxy.$axios.post("user/login", 'mobile=' + formState.mobile);
     if (code == 1 && msg == "INVALID") {
       proxy.$message.info(`无效的手机号。`);
     }
@@ -128,10 +128,14 @@ const checkMethodForPhoneNumber = async () => {
 const router = useRouter();
 const signinMethod = async () => {
   try {
-    let { data: { code, msg, entity } } = await proxy.$axios.post("doctor/signin", 'username=' + formState.username, 'password=' + formState.password);
-    if (code == 1 && msg == "SUCCESS") {
-      sessionStorage.setItem('currentUser', JSON.stringify(entity));
+    let { data } = await proxy.$axios.post("/user/login", {
+      username: formState.username,
+      password: formState.password
+    });
+    if (data.code == 1 ) {
+      sessionStorage.setItem('currentUser', data);
       router.push({ path: '/main' });
+      proxy.$message.warning(`登录成功！`);
     } else {
       proxy.$message.warning(`无效的用户名或密码。`);
     }
@@ -140,13 +144,13 @@ const signinMethod = async () => {
   }
 };
 
-const checkVerificationCode = async () => {
+const checkcaptcha = async () => {
   try {
-    let { data: { code, msg, entity } } = await proxy.$axios.post("doctor/checkVerificationCode", 'verificationCode=' + formState.verificationCode);
+    let { data: { code, msg, entity } } = await proxy.$axios.post("user/checkcaptcha", 'captcha=' + formState.captcha);
     if (code == 1 && msg == "INVALID") {
       proxy.$message.warning(`无效的验证码。`);
     } else if (code == 1 && msg == "SUCCESS") {
-      sessionStorage.setItem('currentphonenumber', JSON.stringify(entity));
+      sessionStorage.setItem('currentmobile', JSON.stringify(entity));
       router.push({ path: '/main' });
     }
   } catch (error) {
@@ -158,28 +162,25 @@ const checkVerificationCode = async () => {
 interface FormState {
   username: string;
   password: string;
-  phonenumber: string;
-  verificationCode: string;
+  mobile: string;
+  captcha: string;
   remember: boolean;
 }
 
 const formState = reactive<FormState>({
   username: '',
   password: '',
-  phonenumber: '',
-  verificationCode: '',
+  mobile: '',
+  captcha: '',
   remember: true,
 });
 
-const onFinish = (values: any) => {
-  console.log('Success:', values);
-};
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
 };
 
-const sendVerificationCode = () => {
+const sendcaptcha = () => {
   console.log('发送验证码');
   // 这里可以添加发送验证码的逻辑
 };
@@ -189,6 +190,6 @@ const disabled1 = computed(() => {
 });
 
 const disabled2 = computed(() => {
-  return !(formState.phonenumber && formState.verificationCode);
+  return !(formState.mobile && formState.captcha);
 });
 </script>
