@@ -76,7 +76,8 @@ const formState = reactive<FormState>({
 
 const onFinish = async () => {
   try {
-    let { data: { code, msg } } = await proxy.$axios.post("doctor/register", formState);
+    console.log(formState)
+    let { data: { code, msg } } = await proxy.$axios.post("user/register", formState);
     if (code == 1 && msg == "SUCCESS") {
       proxy.$message.success('注册成功，请登录');
       router.push({ path: '/signin' });

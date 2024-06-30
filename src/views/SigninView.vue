@@ -4,7 +4,7 @@
     <a-tabs centered class="mytabs" v-model:activeKey="activeKey">
       <a-tab-pane key="1" tab="用户名登入">
         <div class="login-container">
-          <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
+          <a-form :model="formState" name="normal_login" class="login-form"
                   @finishFailed="onFinishFailed">
             <a-form-item label="账号" name="username"
                          :rules="[{ required: true, message: '请输入你的账号!' }]">
@@ -75,7 +75,7 @@
               </a-form-item>
             </a-form-item>
             <a-form-item class="mybutton">
-              <a-button :disabled="disabled2" type="primary" html-type="submit" class="login-form-button">
+              <a-button :disabled="disabled2" type="primary" html-type="submit" @click="signinMethod" class="login-form-button">
                 登入
               </a-button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -128,11 +128,13 @@ const checkMethodFormobile = async () => {
 const router = useRouter();
 const signinMethod = async () => {
   try {
+    console.log(formState)
     let { data } = await proxy.$axios.post("/user/login", {
       username: formState.username,
-      password: formState.password
+      password: formState.password,
+      mobile : formState.mobile,
+      captcha : formState.captcha
     });
-    console.log(data)
     if (data.code == 1 ) {
       sessionStorage.setItem("userid",data.id)
       localStorage.setItem('userid', data.id)
@@ -183,9 +185,9 @@ const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
 };
 
-const sendcaptcha = () => {
-  console.log('发送验证码');
-  // 这里可以添加发送验证码的逻辑
+const sendcaptcha = async() => {
+  let { data} = await proxy.$axios.post("user/captcha", formState);
+  proxy.$message.success(`发送验证码成功！`);
 };
 
 const disabled1 = computed(() => {
