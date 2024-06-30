@@ -1,18 +1,11 @@
 <template>
-  <a-layout-header class="header">
-      <div class="logo" />
-      <a-menu
-        v-model:selectedKeys="selectedKeys"
-        theme="dark"
-        mode="horizontal"
-        :style="{ lineHeight: '64px' }"
-      >
-        <a-menu-item key="1">nav 1</a-menu-item>
-      </a-menu>
-    </a-layout-header>
-  <a-layout style="min-height: 100vh">
-    <a-layout-sider v-model:collapsed="collapsed" collapsible>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+  <a-layout >
+    <a-layout-sider
+        v-model:collapsed="collapsed"
+        breakpoint="lg"
+        style="height: 100vh; background-color: white"
+    >
+      <a-menu v-model:selectedKeys="selectedKeys" mode="inline">
         <a-menu-item key="1" @click="toComponentMethod('/userinfo')">
           <user-outlined />
           <span>用户中心</span>
@@ -48,7 +41,7 @@
     <a-layout>
       <!-- <a-layout-header style="background: #fff; padding: 0" /> -->
       <a-layout-content style="margin: 0 16px" v-if="selectedKeys[0]=='5'">
-        <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
+        <div :style="{ padding: '24px', background: '#fff'}">
           Bill is a cat.
         </div>
       </a-layout-content>
@@ -91,10 +84,4 @@ let roleid = Number(localStorage.getItem('roleid'))
   margin: 16px 0 16px 24px;
 }
 
-.site-layout .site-layout-background {
-  background: #fff;
-}
-[data-theme='dark'] .site-layout .site-layout-background {
-  background: #141414;
-}
 </style>

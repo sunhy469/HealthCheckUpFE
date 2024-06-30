@@ -27,6 +27,5 @@
       </a-descriptions-item>
     </a-descriptions>
   </template>
-  
-  
-  
+
+
