@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, computed, getCurrentInstance, ref } from 'vue';
+import { reactive, computed, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import '../assets/register.css';
 
@@ -90,10 +90,9 @@ const registerMethod = async () => {
       captcha: registerFormState.captcha,
       password: registerFormState.password,
     });
-    console.log(123)
     if (data.code == 1) {
-      sessionStorage.setItem("userid", data.id)
-      localStorage.setItem('userid', data.id)
+      sessionStorage.setItem("id", data.data.id)
+      localStorage.setItem('id', data.data.id)
       localStorage.setItem('roleid', data.roleId)
       proxy.$message.success(`注册成功！`);
       router.push({ path: '/signin' });

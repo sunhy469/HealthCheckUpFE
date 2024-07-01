@@ -1,38 +1,40 @@
 <script setup lang="ts">
-import { ref, reactive, getCurrentInstance,onMounted } from 'vue';
-import type { Rule } from 'ant-design-vue/es/form';
-let userid = Number(localStorage.getItem('userid'))
+import {ref, reactive, getCurrentInstance, onMounted} from 'vue';
+import type {Rule} from 'ant-design-vue/es/form';
+
+let id = Number(localStorage.getItem('id'))
+
 interface FormState {
   username: string;
-  realname: string;
+  name: string;
   sex: string;
-  role: string;
+  roleId: string;
   password: string;
-  registerdate: string;
+  createTime: string;
   mobile: string;
 }
 
 const formState = reactive<FormState>({
   username: '',
-  realname: '',
+  name: '',
   sex: '',
-  role: '',
+  roleId: '',
   password: '',
-  registerdate: '',
+  createTime: '',
   mobile: '',
 });
 const form = reactive({
-  realname: formState.realname,
+  name: formState.name,
   sex: formState.sex,
-  mobile:formState.mobile,
-  password:''
+  mobile: formState.mobile,
+  password: ''
 });
 
 const rules: Record<string, Rule[]> = {
-  realname: [{ required: true, message: '请输入真实姓名' }],
-  sex: [{ required: true, message: '请选择性别' }],
-  mobile: [{ required: true, message: '请输入联系方式' }],
-  password: [{ required: false, message: 'Please choose the type' }],
+  name: [{required: true, message: '请输入真实姓名'}],
+  sex: [{required: true, message: '请选择性别'}],
+  mobile: [{required: true, message: '请输入联系方式'}],
+  password: [{required: false, message: 'Please choose the type'}],
 };
 
 const open = ref<boolean>(false);
@@ -44,9 +46,9 @@ const showDrawer = () => {
 const onClose = () => {
   open.value = false;
 };
-const edit = async()=>{
+const edit = async () => {
   try {
-    let { data } = await proxy.$axios.post("userinfo/editinfo", form);
+    let {data} = await proxy.$axios.post("userinfo/editinfo", form);
     if (data.code == 1) {
       window.location.reload();
     } else {
@@ -60,66 +62,75 @@ const edit = async()=>{
 onMounted(() => {
   obtainDataMethodForUserInfo();
 });
-const { proxy } = getCurrentInstance();
+const {proxy} = getCurrentInstance();
 const obtainDataMethodForUserInfo = async () => {
   try {
-    let { data } = await proxy.$axios.post("userinfo/getinfo", 'userid' + userid);
+    let {data} = await proxy.$axios.post("user/getinfo", {
+      id
+    });
     if (data.code == 1) {
-      data.username = formState.username;
-      data.realname = formState.realname;
-      data.sex = formState.sex;
-      data.role = formState.role;
-      data.password = formState.password;
-      data.registerdate = formState.registerdate;
-      data.mobile = formState.mobile;
+      formState.username = data.data.username
+      formState.name = data.data.name
+      formState.sex = data.data.sex
+      formState.roleId = data.data.roleId
+      formState.createTime = data.data.createTime
+      formState.mobile = data.data.mobile
     } else {
-      proxy.$message.warning(`读取用户列表数据失败。`);
+      proxy.$message.warning(`读取用户列表数据失败。`)
     }
   } catch (error) {
-    proxy.$message.warning(`系统繁忙。请稍后。`);
+    proxy.$message.warning(`系统繁忙。请稍后。`)
     console.log("error:", error);
   }
 }
 </script>
 <template>
+
+  <a-card
+      title = "个人信息"
+      hoverable
+      headStyle = "background-color: #91caff"
+  >
+    <template #extra><a-button type="primary" @click="showDrawer">修改信息</a-button></template>
     <a-descriptions
-      title="个人信息"
-      bordered
-      :column="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }"
-      size="large"
+        bordered
+        :column="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }"
     >
-      <a-descriptions-item label="用户名">{{ formState.username }}</a-descriptions-item>
-      <a-descriptions-item label="真实姓名">{{ formState.realname }}</a-descriptions-item>
-      <a-descriptions-item label="性别">{{ formState.sex }}</a-descriptions-item>
+      <a-descriptions-item label="用户名" :label-style="{ width: '20%' }" >{{ formState.username }}</a-descriptions-item>
+      <a-descriptions-item label="真实姓名">{{ formState.name }}</a-descriptions-item>
+      <a-descriptions-item label="性别">{{ Number(formState.sex) === 0 ? '男' : '女' }}</a-descriptions-item>
       <a-descriptions-item label="联系方式">{{ formState.mobile }}</a-descriptions-item>
-      <a-descriptions-item label="用户类型">{{ formState.role }}</a-descriptions-item>
-      <a-descriptions-item label="注册时间">{{ formState.registerdate }}</a-descriptions-item>
+      <a-descriptions-item label="用户类型">{{
+          Number(formState.roleId) === 0 ? '普通用户' :
+              Number(formState.roleId) === 1 ? '医生' : '管理员'
+        }}
+      </a-descriptions-item>
+      <a-descriptions-item label="注册时间">{{ formState.createTime }}</a-descriptions-item>
     </a-descriptions>
-    <a-button type="primary" @click="showDrawer" style="text-align: center">
-    <template #icon><PlusOutlined /></template>
-    修改信息
-  </a-button>
+  </a-card>
+
+
   <a-drawer
-    title="修改信息"
-    :width="920"
-    :open="open"
-    :body-style="{ paddingBottom: '80px' }"
-    :footer-style="{ textAlign: 'right' }"
-    @close="onClose"
+      title="修改信息"
+      :width="920"
+      :open="open"
+      :body-style="{ paddingBottom: '80px' }"
+      :footer-style="{ textAlign: 'right' }"
+      @close="onClose"
   >
     <a-form :model="form" :rules="rules" layout="vertical">
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item label="姓名" name="realname">
-            <a-input v-model:value="form.realname" placeholder="请输入真实姓名" />
+          <a-form-item label="姓名" name="name">
+            <a-input v-model:value="form.name" placeholder="请输入真实姓名"/>
           </a-form-item>
         </a-col>
         <a-col :span="12">
           <a-form-item label="性别" name="sex">
             <a-radio-group v-model:value="form.sex" button-style="solid">
-            <a-radio-button value="0">男</a-radio-button>
-            <a-radio-button value="1">女</a-radio-button>
-            <a-radio-button value="null">不愿透露</a-radio-button>
+              <a-radio-button value="0">男</a-radio-button>
+              <a-radio-button value="1">女</a-radio-button>
+              <a-radio-button value="null">不愿透露</a-radio-button>
             </a-radio-group>
           </a-form-item>
         </a-col>
@@ -136,7 +147,7 @@ const obtainDataMethodForUserInfo = async () => {
           </a-form-item>
         </a-col>
       </a-row>
-      
+
     </a-form>
     <template #extra>
       <a-space>
@@ -145,4 +156,4 @@ const obtainDataMethodForUserInfo = async () => {
       </a-space>
     </template>
   </a-drawer>
-  </template>
+</template>
