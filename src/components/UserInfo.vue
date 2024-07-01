@@ -2,8 +2,8 @@
 import {ref, reactive, getCurrentInstance, onMounted} from 'vue';
 import type {Rule} from 'ant-design-vue/es/form';
 
-let id = Number(localStorage.getItem('id'))
-
+let id = localStorage.getItem('id')?.toString()
+console.log(id)
 interface FormState {
   username: string;
   name: string;
@@ -112,7 +112,7 @@ const obtainDataMethodForUserInfo = async () => {
 
   <a-drawer
       title="修改信息"
-      :width="920"
+      :width=600
       :open="open"
       :body-style="{ paddingBottom: '80px' }"
       :footer-style="{ textAlign: 'right' }"

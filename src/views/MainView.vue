@@ -34,7 +34,7 @@
             </span>
           </template>
           <a-menu-item key="8" v-if="roleid == 1">患者信息</a-menu-item>
-          <a-menu-item key="9" v-if="roleid == 2">管理用户</a-menu-item>
+          <a-menu-item key="9" v-if="roleid == 2" @click="toComponentMethod('/usermanage')">管理用户</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>
