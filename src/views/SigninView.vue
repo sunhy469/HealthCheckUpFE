@@ -4,11 +4,11 @@
     <a-tabs centered class="mytabs" v-model:activeKey="activeKey">
       <a-tab-pane key="1" tab="用户名登入">
         <div class="login-container">
-          <a-form :model="formState" name="normal_login" class="login-form"
+          <a-form :model="userformState" name="normal_login" class="login-form"
                   @finishFailed="onFinishFailed">
             <a-form-item label="账号" name="username"
                          :rules="[{ required: true, message: '请输入你的账号!' }]">
-              <a-input v-model:value="formState.username">
+              <a-input v-model:value="userformState.username">
                 <template #prefix>
                   <UserOutlined class="site-form-item-icon"/>
                 </template>
@@ -17,7 +17,7 @@
 
             <a-form-item label="密码" name="password"
                          :rules="[{ required: true, message: '请输入你的密码!' }]">
-              <a-input-password v-model:value="formState.password">
+              <a-input-password v-model:value="userformState.password">
                 <template #prefix>
                   <LockOutlined class="site-form-item-icon"/>
                 </template>
@@ -26,13 +26,13 @@
 
             <a-form-item>
               <a-form-item name="remember" no-style>
-                <a-checkbox v-model:checked="formState.remember">记住我&nbsp;&nbsp;&nbsp;&nbsp;</a-checkbox>
+                <a-checkbox v-model:checked="userformState.remember">记住我&nbsp;&nbsp;&nbsp;&nbsp;</a-checkbox>
               </a-form-item>
               <a class="login-form-forgot" href="">忘记密码</a>
             </a-form-item>
 
             <a-form-item class="mybutton">
-              <a-button :disabled="disabled1" type="primary"  @click="signinMethod" html-type="submit" class="login-form-button">
+              <a-button :disabled="disabled1" type="primary"  @click="SigninUserMethod" html-type="submit" class="login-form-button">
                 登入
               </a-button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -47,11 +47,11 @@
 
       <a-tab-pane key="2" tab="手机号登入">
         <div class="login-container">
-          <a-form :model="formState" name="phone_login" class="login-form"
+          <a-form :model="phoneformState" name="phone_login" class="login-form"
                   @finishFailed="onFinishFailed">
             <a-form-item label="手机号" name="mobile"
                          :rules="[{ required: true, message: '请输入你的手机号!' }]" @blur='checkMethodFormobile()'>
-              <a-input v-model:value="formState.mobile">
+              <a-input v-model:value="phoneformState.mobile">
                 <template #prefix>
                   <UserOutlined class="site-form-item-icon"/>
                 </template>
@@ -62,7 +62,7 @@
                          :rules="[{ required: true, message: '请输入你的验证码!' }]" @blur='checkcaptcha()'>
               <a-row gutter="8">
                 <a-col span="15">
-                  <a-input v-model:value="formState.captcha"/>
+                  <a-input v-model:value="phoneformState.captcha"/>
                 </a-col>
                 <a-col span="9">
                   <a-button @click="sendcaptcha">发送验证码</a-button>
@@ -71,11 +71,11 @@
             </a-form-item>
             <a-form-item>
               <a-form-item name="remember" no-style>
-                <a-checkbox v-model:checked="formState.remember">记住我&nbsp;&nbsp;&nbsp;&nbsp;</a-checkbox>
+                <a-checkbox v-model:checked="phoneformState.remember">记住我&nbsp;&nbsp;&nbsp;&nbsp;</a-checkbox>
               </a-form-item>
             </a-form-item>
             <a-form-item class="mybutton">
-              <a-button :disabled="disabled2" type="primary" html-type="submit" @click="signinMethod" class="login-form-button">
+              <a-button :disabled="disabled2" type="primary" html-type="submit" @click="SigninPhoneMethod" class="login-form-button">
                 登入
               </a-button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -116,7 +116,7 @@ const { proxy } = getCurrentInstance();
 
 const checkMethodFormobile = async () => {
   try {
-    let { data: { code, msg } } = await proxy.$axios.post("user/login", 'mobile=' + formState.mobile);
+    let { data: { code, msg } } = await proxy.$axios.post("user/login", 'mobile=' + phoneformState.mobile);
     if (code == 1 && msg == "INVALID") {
       proxy.$message.info(`无效的手机号。`);
     }
@@ -126,14 +126,13 @@ const checkMethodFormobile = async () => {
 };
 
 const router = useRouter();
-const signinMethod = async () => {
+const SigninUserMethod = async () => {
   try {
-    console.log(formState)
+    console.log(1234)
+    console.log(userformState)
     let { data } = await proxy.$axios.post("/user/login", {
-      username: formState.username,
-      password: formState.password,
-      mobile : formState.mobile,
-      captcha : formState.captcha
+      username: userformState.username,
+      password: userformState.password,
     });
     if (data.code == 1 ) {
       sessionStorage.setItem("userid",data.id)
@@ -149,9 +148,32 @@ const signinMethod = async () => {
   }
 };
 
+const SigninPhoneMethod = async () => {
+  try {
+    console.log(1234)
+    console.log(phoneformState)
+    let { data } = await proxy.$axios.post("/user/login", {
+      mobile : phoneformState.mobile,
+      captcha : phoneformState.captcha
+    });
+    if (data.code == 1 ) {
+      sessionStorage.setItem("userid",data.id)
+      localStorage.setItem('userid', data.id)
+      localStorage.setItem('roleid', data.roleId)
+      router.push({ path: '/main' });
+      proxy.$message.success(`登录成功！`);
+    } else {
+      proxy.$message.warning(`无效的用户名或密码。`);
+    }
+  } catch (error) {
+    proxy.$message.error(`系统繁忙。请稍后。`);
+  }
+};
+
+
 const checkcaptcha = async () => {
   try {
-    let { data: { code, msg, entity } } = await proxy.$axios.post("user/checkcaptcha", 'captcha=' + formState.captcha);
+    let { data: { code, msg, entity } } = await proxy.$axios.post("user/checkcaptcha", 'captcha=' + phoneformState.captcha);
     if (code == 1 && msg == "INVALID") {
       proxy.$message.warning(`无效的验证码。`);
     } else if (code == 1 && msg == "SUCCESS") {
@@ -164,37 +186,44 @@ const checkcaptcha = async () => {
 };
 
 
-interface FormState {
+interface UserFormState {
   username: string;
   password: string;
+  remember: boolean;
+}
+
+const userformState = reactive<UserFormState>({
+  username: '',
+  password: '',
+  remember: true,
+});
+
+interface PhoneFormState {
   mobile: string;
   captcha: string;
   remember: boolean;
 }
 
-const formState = reactive<FormState>({
-  username: '',
-  password: '',
+const phoneformState = reactive<PhoneFormState>({
   mobile: '',
   captcha: '',
   remember: true,
 });
-
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
 };
 
 const sendcaptcha = async() => {
-  let { data} = await proxy.$axios.post("user/captcha", formState);
+  let { data } = await proxy.$axios.post("user/captcha", phoneformState);
   proxy.$message.success(`发送验证码成功！`);
 };
 
 const disabled1 = computed(() => {
-  return !(formState.username && formState.password);
+  return !(userformState.username && userformState.password);
 });
 
 const disabled2 = computed(() => {
-  return !(formState.mobile && formState.captcha);
+  return !(phoneformState.mobile && phoneformState.captcha);
 });
 </script>
