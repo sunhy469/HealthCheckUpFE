@@ -4,7 +4,6 @@ const SigninView = () => import('../views/SigninView.vue')
 const MainView = () => import('../views/MainView.vue')
 const RegisterView = () => import('../views/RegisterView.vue')
 const UserInfo = () => import('../components/UserInfo.vue')
-const EditInfo = () => import('../components/EditInfo.vue')
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,17 +34,6 @@ const router = createRouter({
                     meta: {
                         title: '个人信息'
                     },
-                    children: [
-                        {
-                            path: 'editinfo',
-                            name: 'editinfo',
-                            alias: '/editinfo',
-                            component: EditInfo,
-                            meta: {
-                                title: '编辑信息'
-                            }
-                        }
-                    ]
                 }
             ]
         },
