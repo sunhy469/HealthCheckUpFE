@@ -115,7 +115,7 @@ const checkMobile = async () => {
     proxy.$message.warning(`系统繁忙。请稍后。`);
   }
 };
-
+//
 const checkCaptcha = async () => {
   try {
     console.log(123)

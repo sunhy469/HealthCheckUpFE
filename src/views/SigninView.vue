@@ -103,16 +103,6 @@ const goToRegister = () => {
 };
 
 const { proxy } = getCurrentInstance();
-// const checkMethodForUsername = async () => {
-//   try {
-//     let { data: { code, msg } } = await proxy.$axios.post("user/checkUsername", 'username=' + formState.username);
-//     if (code == 1 && msg == "INVALID") {
-//       proxy.$message.info(`无效的用户名。`);
-//     }
-//   } catch (error) {
-//     proxy.$message.warning(`系统繁忙。请稍后。`);
-//   }
-// };
 
 const checkMethodFormobile = async () => {
   try {
