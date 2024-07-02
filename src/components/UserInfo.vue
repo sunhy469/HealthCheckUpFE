@@ -25,13 +25,11 @@ const formState = reactive<FormState>({
 });
 const form = reactive({
   id: id,
-  username: formState.username,
   name: formState.name,
   sex: formState.sex,
   mobile: formState.mobile,
-  password: ''
+  password: '',
 });
-
 const rules: Record<string, Rule[]> = {
   name: [{ required: true, message: '请输入真实姓名' }],
   sex: [{ required: true, message: '请选择性别' }],
@@ -77,6 +75,9 @@ const obtainDataMethodForUserInfo = async () => {
       formState.roleId = data.data.roleId
       formState.createTime = data.data.createTime
       formState.mobile = data.data.mobile
+      form.name= formState.name,
+      form.sex= formState.sex,
+      form.mobile= formState.mobile
     } else {
       proxy.$message.warning(`读取用户列表数据失败。`)
     }
@@ -93,7 +94,7 @@ const obtainDataMethodForUserInfo = async () => {
     <a-descriptions bordered :column="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }">
       <a-descriptions-item label="用户名" :label-style="{ width: '20%' }">{{ formState.username }}</a-descriptions-item>
       <a-descriptions-item label="真实姓名">{{ formState.name }}</a-descriptions-item>
-      <a-descriptions-item label="性别">{{ Number(formState.sex) === 0 ? '男' : '女' }}</a-descriptions-item>
+      <a-descriptions-item label="性别">{{ Number(formState.sex) === 0 ? '男' :Number(formState.sex) === 1 ? '女':'不愿透露' }}</a-descriptions-item>
       <a-descriptions-item label="联系方式">{{ formState.mobile }}</a-descriptions-item>
       <a-descriptions-item label="用户类型">{{
         Number(formState.roleId) === 0 ? '普通用户' :
@@ -119,7 +120,7 @@ const obtainDataMethodForUserInfo = async () => {
             <a-radio-group v-model:value="form.sex" button-style="solid">
               <a-radio-button value="0">男</a-radio-button>
               <a-radio-button value="1">女</a-radio-button>
-              <a-radio-button value="null">不愿透露</a-radio-button>
+              <a-radio-button value="2">不愿透露</a-radio-button>
             </a-radio-group>
           </a-form-item>
         </a-col>

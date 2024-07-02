@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" :row-selection=access1 :data-source="data" :scroll="{ x: 1500, y: 900 }" bordered
+  <a-table :columns="columns" :row-selection=access1 :data-source="dataSource" :scroll="{ x: 1500, y: 900 }" bordered
     :pagination="pagination" :loading="loading" @change="handleTableChange">
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'operation'">
@@ -76,7 +76,6 @@ import axios from 'axios';
 let roleid = Number(localStorage.getItem('roleid'))
 let access1 = roleid == 2?"rowSelection":null 
 let access2 = roleid == 2?false:true
-
 const columns: TableColumnsType = [
   { title: '用户名', width: 100, dataIndex: 'username', key: 'username', fixed: 'left' },
   { title: '真实姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
@@ -175,24 +174,23 @@ type APIParams = {
 };
 
 type APIResult = {
-  results: {
+  data: {
     id: string;
     username: string;
     name: string;
     sex: string;
     mobile: string;
+    roleid: string;
     createTime: string;
-    lastloginTime: string;
+    //lastloginTime: string;
   }[];
 };
 //请求数据
-const queryData = (params: APIParams) => {
-  if(roleid == 1){
-    return axios.get<APIResult>('/user/getall', { params });
-  }
-  else if (roleid == 2){
+const queryData = async (params: APIParams) => {
+  if(roleid == 1)
     return axios.get<APIResult>('/user/getpatient', { params });
-  }
+  else
+    return axios.get<APIResult>('/user/getall', { params });
 };
 //返回数据写入
 const {
@@ -202,7 +200,16 @@ const {
   current,
   pageSize,
 } = usePagination(queryData, {
-  formatResult: res => res.data.results,
+  formatResult: res => res.data.data.map(item => ({
+    id: item.id,
+    username: item.username,
+    name: item.name,
+    sex: item.sex,
+    mobile: item.mobile,
+    roleid: item.roleid,
+    createTime: item.createTime,
+    //lastloginTime: item.lastloginTime || 'N/A', // 假设如果没有 lastloginTime，就填充为 'N/A'
+  })),
   pagination: {
     currentKey: 'page',
     pageSizeKey: 'results',
