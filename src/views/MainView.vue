@@ -1,10 +1,6 @@
 <template>
-  <a-layout >
-    <a-layout-sider
-        v-model:collapsed="collapsed"
-        breakpoint="lg"
-        style="height: 100vh; background-color: white"
-    >
+  <a-layout>
+    <a-layout-sider v-model:collapsed="collapsed" breakpoint="lg" style="height: 100vh; background-color: white">
       <a-menu v-model:selectedKeys="selectedKeys" mode="inline">
         <a-menu-item key="1" @click="toComponentMethod('/userinfo')">
           <user-outlined />
@@ -19,21 +15,21 @@
           </template>
           <a-menu-item key="3" v-if="roleid == 0">预约体检</a-menu-item>
           <a-menu-item key="4" v-if="roleid == 0">体检记录</a-menu-item>
-          <a-menu-item key="5" v-if="roleid !=0">今日预约记录</a-menu-item>
-          <a-menu-item key="6" v-if="roleid !=0">管理体检记录</a-menu-item>
+          <a-menu-item key="5" v-if="roleid != 0">今日预约记录</a-menu-item>
+          <a-menu-item key="6" v-if="roleid != 0">管理体检记录</a-menu-item>
         </a-sub-menu>
         <a-menu-item key="7" v-if="roleid == 0">
           <contacts-outlined />
           <span>关于我们</span>
         </a-menu-item>
-        <a-sub-menu key="3" v-if="roleid !=0">
+        <a-sub-menu key="3" v-if="roleid != 0">
           <template #title>
             <span>
               <contacts-outlined />
               <span>账户管理</span>
             </span>
           </template>
-          <a-menu-item key="8" v-if="roleid == 1">患者信息</a-menu-item>
+          <a-menu-item key="8" v-if="roleid == 1" @click="toComponentMethod('/usermanage')">患者信息</a-menu-item>
           <a-menu-item key="9" v-if="roleid == 2" @click="toComponentMethod('/usermanage')">管理用户</a-menu-item>
         </a-sub-menu>
       </a-menu>
@@ -54,7 +50,7 @@ import {
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
-const toComponentMethod = (subpath : any) => {
+const toComponentMethod = (subpath: any) => {
   router.push({ path: '/main' + subpath });
 }
 const collapsed = ref<boolean>(false);
@@ -64,7 +60,6 @@ let roleid = Number(localStorage.getItem('roleid'))
 
 </script>
 <style scoped>
-
 .logo {
   float: left;
   width: 140px;
@@ -77,5 +72,4 @@ let roleid = Number(localStorage.getItem('roleid'))
   float: right;
   margin: 16px 0 16px 24px;
 }
-
 </style>
