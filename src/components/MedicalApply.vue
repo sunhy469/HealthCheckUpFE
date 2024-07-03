@@ -396,13 +396,10 @@ const range = (start: number, end: number) => {
 
 const onSubmit = async () => {
   try {
-    const [institution, type , setMeal, doctor] = cascaderValue.value;
+    const [,,, doctor_id] = cascaderValue.value;
     const requestData = {
       userId : Number(localStorage.getItem('id')),
-      institution,
-      type,
-      setMeal,
-      doctor,
+      doctor_id,
       appointmentTime: appointmentTime.value ? appointmentTime.value.format('YYYY-MM-DD HH:mm:ss') : null,
     };
     console.log(requestData)
