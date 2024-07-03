@@ -232,77 +232,77 @@ const handleReset = clearFilters => {
 
 // const data = [
 //   {
-//     name: '王小明',
+//     aname: '王小明',
 //     dept_name: '常规体检',
 //     combo: '基础套餐',
 //     createTime: '2024-07-01 09:00:00',
 //     isFinished: 0
 //   },
 //   {
-//     name: '王小明',
+//     aname: '王小明',
 //     dept_name: '入职体检',
 //     combo: '高级套餐',
 //     createTime: '2024-07-01 10:00:00',
 //     isFinished: 0
 //   },
 //   {
-//     name: '张三',
+//     aname: '张三',
 //     dept_name: '常规体检',
 //     combo: '基础套餐',
 //     createTime: '2024-07-02 08:30:00',
 //     isFinished: 0
 //   },
 //   {
-//     name: '李四',
+//     aname: '李四',
 //     dept_name: '入职体检',
 //     combo: '高级套餐',
 //     createTime: '2024-07-02 11:00:00',
 //     isFinished: 0
 //   },
 //   {
-//     name: '王五',
+//     aname: '王五',
 //     dept_name: '常规体检',
 //     combo: '基础套餐',
 //     createTime: '2024-07-03 09:30:00',
 //     isFinished: 0
 //   },
 //   {
-//     name: '赵六',
+//     aname: '赵六',
 //     dept_name: '常规体检',
 //     combo: '高级套餐',
 //     createTime: '2024-07-03 10:30:00',
 //     isFinished: 0
 //   },
 //   {
-//     name: '孙七',
+//     aname: '孙七',
 //     dept_name: '入职体检',
 //     combo: '基础套餐',
 //     createTime: '2024-07-04 08:00:00',
 //     isFinished: 0
 //   },
 //   {
-//     name: '周八',
+//     aname: '周八',
 //     dept_name: '入职体检',
 //     combo: '高级套餐',
 //     createTime: '2024-07-04 10:45:00',
 //     isFinished: 1
 //   },
 //   {
-//     name: '吴九',
+//     aname: '吴九',
 //     dept_name: '常规体检',
 //     combo: '基础套餐',
 //     createTime: '2024-07-05 09:15:00',
 //     isFinished: 1
 //   },
 //   {
-//     name: '郑十',
+//     aname: '郑十',
 //     dept_name: '入职体检',
 //     combo: '高级套餐',
 //     createTime: '2024-07-05 11:30:00',
 //     isFinished: 0
 //   },
 //   {
-//     name: '木十一',
+//     aname: '木十一',
 //     dept_name: '入职体检',
 //     combo: '高级套餐',
 //     createTime: '2024-07-06 11:30:00',

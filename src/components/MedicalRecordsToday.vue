@@ -16,8 +16,8 @@
       </template>
 
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'name'">
-          <a>{{ record.username }}</a>
+        <template v-if="column.key === 'aname'">
+          <a>{{ record.aname }}</a>
         </template>
         <template v-else-if="column.key === 'dept_name'">
           <span>{{ record.dept_name }}</span>
