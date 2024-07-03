@@ -1,4 +1,10 @@
 <template>
+  <a-card
+      title="管理用户"
+      hoverable
+      headStyle="background-color: #91caff"
+      style="min-height: 350px "
+  >
   <a-table :columns="columns" :data-source="dataSource" :scroll="{ x: 1500, y: 900 }" bordered
     :pagination="pagination" :loading="loading" @change="handleTableChange">
     <template #bodyCell="{ column, record }">
@@ -9,6 +15,7 @@
       </template>
     </template>
   </a-table>
+  </a-card>
   <a-drawer title="详细信息" :width="600" :open="open" :body-style="{ paddingBottom: '80px' }"
     :footer-style="{ textAlign: 'right' }" @close="onClose">
     <a-form :model="form" layout="vertical">

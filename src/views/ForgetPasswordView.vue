@@ -25,9 +25,9 @@
           </a-row>
         </a-form-item>
 
-        <a-form-item label="新密码" name="newPassword"
+        <a-form-item label="新密码" name="password"
                      :rules="[{ required: true, message: '请输入你的新密码!' }]">
-          <a-input-password v-model:value="forgetPasswordFormState.newPassword">
+          <a-input-password v-model:value="forgetPasswordFormState.password">
             <template #prefix>
               <LockOutlined class="site-form-item-icon"/>
             </template>
@@ -65,10 +65,10 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
 const modifyMethod = async () => {
   try {
-    let { data } = await proxy.$axios.post("/user/modifyPassword", {
+    let { data } = await proxy.$axios.post("/user/modpwd", {
       mobile: forgetPasswordFormState.mobile,
       captcha: forgetPasswordFormState.captcha,
-      newPassword: forgetPasswordFormState.newPassword,
+      password: forgetPasswordFormState.password,
     });
     if (data.code == 1) {
       proxy.$message.success(`密码修改成功！`);
@@ -109,7 +109,7 @@ const sendCaptcha = async () => {
 };
 
 const validatePassword = (rule: any, value: string, callback: any) => {
-  if (value !== forgetPasswordFormState.newPassword) {
+  if (value !== forgetPasswordFormState.password) {
     callback(new Error('两次输入的密码不一致！'));
   } else {
     callback();
@@ -119,19 +119,19 @@ const validatePassword = (rule: any, value: string, callback: any) => {
 interface forgetPasswordFormState {
   mobile: string;
   captcha: string;
-  newPassword: string;
+  password: string;
   confirmPassword: string;
 }
 
 const forgetPasswordFormState = reactive<forgetPasswordFormState>({
   mobile: '',
   captcha: '',
-  newPassword: '',
+  password: '',
   confirmPassword: '',
 });
 
 const isDisabled = computed(() => {
-  return !(forgetPasswordFormState.mobile && forgetPasswordFormState.captcha && forgetPasswordFormState.newPassword && forgetPasswordFormState.confirmPassword);
+  return !(forgetPasswordFormState.mobile && forgetPasswordFormState.captcha && forgetPasswordFormState.password && forgetPasswordFormState.confirmPassword);
 });
 </script>
 

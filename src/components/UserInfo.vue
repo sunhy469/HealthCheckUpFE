@@ -28,7 +28,7 @@ const form = reactive({
   name: formState.name,
   sex: formState.sex,
   mobile: formState.mobile,
-  password: '',
+  password: null,
 });
 const rules: Record<string, Rule[]> = {
   name: [{ required: true, message: '请输入真实姓名' }],

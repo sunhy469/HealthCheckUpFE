@@ -398,11 +398,12 @@ const onSubmit = async () => {
   try {
     const [,,, doctor_id] = cascaderValue.value;
     const requestData = {
-      userId : Number(localStorage.getItem('id')),
-      doctor_id,
+      userId : localStorage.getItem('id'),
+      doctorId : 0,
       appointmentTime: appointmentTime.value ? appointmentTime.value.format('YYYY-MM-DD HH:mm:ss') : null,
+      doctorName: doctor_id,
     };
-    console.log(requestData)
+
     const { data } = await proxy.$axios.post("/home/apply", requestData);
     if (data.code === 1) {
       proxy.$message.success('预约成功！');

@@ -29,7 +29,7 @@
                 </div>
               </a-form-item>
               <a-form-item class="mybutton">
-                <a-button :disabled="disabled1" type="primary" @click="SigninUserMethod" html-type="submit" class="login-form-button">登入</a-button>
+                <a-button  type="primary" @click="SigninUserMethod" html-type="submit" class="login-form-button">登入</a-button>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a-button type="primary" @click="goToRegister" html-type="submit" class="login-form-button">注册</a-button>
               </a-form-item>
@@ -116,7 +116,7 @@ const SigninUserMethod = async () => {
       sessionStorage.setItem("id",data.data.id)
       localStorage.setItem('id', data.data.id)
       localStorage.setItem('roleid', data.data.roleId)
-      router.push({ path: '/main' });
+      router.push({ path: '/main/userinfo' });
       proxy.$message.success(`登录成功！`);
     } else {
       proxy.$message.warning(`无效的用户名或密码。`);
@@ -136,7 +136,7 @@ const SigninPhoneMethod = async () => {
       localStorage.setItem('id', data.data.id)
       localStorage.setItem('roleid', data.data.roleId)
       localStorage.setItem('token', data.data.token)
-      router.push({ path: '/main' });
+      router.push({ path: '/main/userinfo' });
       proxy.$message.success(`登录成功！`);
     } else {
       proxy.$message.warning(`无效的用户名或密码。`);
@@ -153,7 +153,7 @@ const checkcaptcha = async () => {
       proxy.$message.warning(`无效的验证码。`);
     } else if (code == 1 && msg == "SUCCESS") {
       sessionStorage.setItem('currentmobile', JSON.stringify(entity));
-      router.push({ path: '/main' });
+      router.push({ path: '/main/userinfo' });
     }
   } catch (error) {
     proxy.$message.warning(`系统繁忙。请稍后。`);
@@ -193,9 +193,6 @@ const sendcaptcha = async () => {
   proxy.$message.success(`发送验证码成功！`);
 };
 
-const disabled1 = computed(() => {
-  return !(userformState.username && userformState.password);
-});
 
 const disabled2 = computed(() => {
   return !(phoneformState.mobile && phoneformState.captcha);
