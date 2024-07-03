@@ -3,6 +3,7 @@ import { ref, reactive, getCurrentInstance, onMounted } from 'vue';
 import type { Rule } from 'ant-design-vue/es/form';
 
 let id = localStorage.getItem('id')?.toString()
+let access1=true;
 console.log(id)
 interface FormState {
   username: string;
@@ -87,10 +88,10 @@ const obtainDataMethodForUserInfo = async () => {
 }
 </script>
 <template>
-
   <a-card title="个人信息" hoverable headStyle="background-color: #91caff">
-    <template #extra><a-button type="primary" @click="showDrawer">修改信息</a-button></template>
-    <a-descriptions bordered :column="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }">
+    <template #extra>
+      <a-button type="primary" @click="showDrawer">修改信息</a-button></template>
+    <a-descriptions bordered :column="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" :loading=access1>
       <a-descriptions-item label="用户名" :label-style="{ width: '20%' }">{{ formState.username }}</a-descriptions-item>
       <a-descriptions-item label="真实姓名">{{ formState.name }}</a-descriptions-item>
       <a-descriptions-item label="性别">{{ Number(formState.sex) === 0 ? '男' :Number(formState.sex) === 1 ? '女':'不愿透露' }}</a-descriptions-item>
@@ -103,7 +104,6 @@ const obtainDataMethodForUserInfo = async () => {
       <a-descriptions-item label="注册时间">{{ formState.createTime }}</a-descriptions-item>
     </a-descriptions>
   </a-card>
-
 
   <a-drawer title="修改信息" :width=600 :open="open" :body-style="{ paddingBottom: '80px' }"
     :footer-style="{ textAlign: 'right' }" @close="onClose">

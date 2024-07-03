@@ -4,7 +4,7 @@
       hoverable
       headStyle="background-color: #91caff"
   >
-    <a-table :data-source="orderformState" :columns="columns">
+    <a-table :data-source="orderformState" :columns="columns" :loading=access1>
       <template #headerCell="{ column }">
         <template v-if="column.key === 'aname'">
           <span style="color: #1890ff">患者姓名</span>
@@ -80,7 +80,7 @@ import { message, Modal } from 'ant-design-vue';
 const { proxy } = getCurrentInstance();
 const currentid = localStorage.getItem('id');
 const roleid = localStorage.getItem('roleid');
-
+let access1=true;
 interface OrderFormState {
   id: number;
   aname: string;
@@ -112,7 +112,7 @@ const obtainDataMethodFororderList = async () => {
         appointmentTime: item.appointmentTime,
         isFinished: item.isFinished,
       }));
-
+      access1=false;
     } else {
       proxy.$message.warning('读取订单列表数据失败。');
     }

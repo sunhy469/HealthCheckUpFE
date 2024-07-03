@@ -5,7 +5,7 @@
       headStyle="background-color: #91caff"
       style="min-height: 350px "
   >
-    <a-table :columns="columns" :data-source="orderformState" bordered :scroll="{ x: 'max-content' }">
+    <a-table :columns="columns" :data-source="orderformState" bordered :scroll="{ x: 'max-content' }" :loading=access1>
       <template #headerCell="{ column }">
         <template v-if="column.key === 'finish'">
           <span>操作</span>
@@ -50,7 +50,7 @@ import { useRouter } from 'vue-router';
 import { message, Modal } from 'ant-design-vue';
 
 const router = useRouter();
-
+let access1 = true;
 interface OrderFormState {
   id: number;
   aname: string;
@@ -91,6 +91,7 @@ const obtainDataMethodFororderList = async () => {
         appointmentTime: item.appointmentTime,
         isFinished: item.isFinished,
       }));
+      access1 = false;
       console.log("orderformState:", orderformState.value);
     } else {
       proxy.$message.warning(`读取订单列表数据失败。`);

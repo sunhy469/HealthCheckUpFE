@@ -18,10 +18,6 @@
           <a-menu-item key="5" v-if="roleid !=0" @click="toComponentMethod('/MedicalRecordsToday')">今日预约记录</a-menu-item>
           <a-menu-item key="6" v-if="roleid !=0" @click="toComponentMethod('/MedicalRecords')">管理体检记录</a-menu-item>
         </a-sub-menu>
-        <a-menu-item key="7" v-if="roleid == 0">
-          <contacts-outlined />
-          <span>关于我们</span>
-        </a-menu-item>
         <a-sub-menu key="3" v-if="roleid != 0">
           <template #title>
             <span>
@@ -29,10 +25,10 @@
               <span>账户管理</span>
             </span>
           </template>
-          <a-menu-item key="8" v-if="roleid == 1" @click="toComponentMethod('/usermanage')">患者信息</a-menu-item>
-          <a-menu-item key="9" v-if="roleid == 2" @click="toComponentMethod('/usermanage')">管理用户</a-menu-item>
+          <a-menu-item key="7" v-if="roleid == 1" @click="toComponentMethod('/usermanage')">患者信息</a-menu-item>
+          <a-menu-item key="8" v-if="roleid == 2" @click="toComponentMethod('/usermanage')">管理用户</a-menu-item>
         </a-sub-menu>
-        <a-menu-item key="10" @click="logout">
+        <a-menu-item key="9" @click="logout">
           <PoweroffOutlined />
           <span>退出登录</span>
         </a-menu-item>
