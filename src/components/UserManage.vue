@@ -55,12 +55,12 @@
               <a-radio-button value="2">管理员</a-radio-button>
             </a-radio-group>
           </a-form-item>
-        </a-col>
+        <!-- </a-col>
         <a-col :span="12">
           <a-form-item label="所在科室" name="deptid" v-if="form.roleId=='1'">
             <a-cascader v-model:value="value" :options="options" :load-data="loadData" placeholder="Please select" change-on-select/>
           </a-form-item>
-        </a-col>
+        </a-col> -->
       </a-row>
     </a-form>
     <template #extra>
