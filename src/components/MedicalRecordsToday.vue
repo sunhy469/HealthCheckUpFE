@@ -3,7 +3,7 @@
       title="当日订单"
       hoverable
       headStyle="background-color: #91caff"
-      style="min-height: 350px"
+      style="min-height: 350px "
   >
     <a-table :columns="columns" :data-source="orderformState" bordered :scroll="{ x: 'max-content' }">
       <template #headerCell="{ column }">
@@ -17,7 +17,7 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'name'">
-          <a>{{ record.name }}</a>
+          <a>{{ record.username }}</a>
         </template>
         <template v-else-if="column.key === 'dept_name'">
           <span>{{ record.dept_name }}</span>
@@ -53,7 +53,7 @@ const router = useRouter();
 
 interface OrderFormState {
   id: number;
-  name: string;
+  aname: string;
   hospital_name: string;
   combo: string;
   dept_name: string;
@@ -75,18 +75,23 @@ const formattedDate = `${year}-${month}-${day}`;
 
 const obtainDataMethodFororderList = async () => {
   try {
-    let { data } = await proxy.$axios.post("main/recordtoday", { currentid, roleid });
+    let { data } = await proxy.$axios.post("home/recordtoday", {
+      id : currentid , // 用户Id
+      roleId : roleid
+    }
+    );
     if (data.code == 1) {
-      orderformState.value = data.list.map((item: any) => ({
-        id: item.id,
-        name: item.name,
-        hospital_name: item.hospital_name,
+      orderformState.value = data.data.map((item: any) => ({
+        id: item.id, //订单id
+        aname: item.name, // 患者姓名
+        hospital_name: item.hospitalName,
         combo: item.combo,
-        dept_name: item.dept_name,
-        doctor_name: item.doctor_name,
+        dept_name: item.deptName,
+        doctor_name:item.doctorName,
         appointmentTime: item.appointmentTime,
         isFinished: item.isFinished,
       }));
+      console.log("orderformState:", orderformState.value);
     } else {
       proxy.$message.warning(`读取订单列表数据失败。`);
     }
@@ -131,8 +136,8 @@ onMounted(() => {
 const columns = [
   {
     title: '患者姓名',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'aname',
+    key: 'aname',
   },
   {
     title: '预约类型',

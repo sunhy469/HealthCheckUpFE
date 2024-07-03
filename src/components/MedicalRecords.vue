@@ -6,7 +6,7 @@
   >
     <a-table :data-source="orderformState" :columns="columns">
       <template #headerCell="{ column }">
-        <template v-if="column.key === 'name'">
+        <template v-if="column.key === 'aname'">
           <span style="color: #1890ff">患者姓名</span>
         </template>
       </template>
@@ -83,7 +83,7 @@ const roleid = localStorage.getItem('roleid');
 
 interface OrderFormState {
   id: number;
-  name: string;
+  aname: string;
   hospital_name: string;
   combo: string;
   dept_name: string;
@@ -96,18 +96,23 @@ const orderformState = ref<OrderFormState[]>([]);
 
 const obtainDataMethodFororderList = async () => {
   try {
-    let { data } = await proxy.$axios.post('main/doctorManage', { currentid,roleid });
+    let { data } = await proxy.$axios.post('home/recordtoday',
+        {
+          id : currentid , // 用户Id
+          roleId : roleid
+        });
     if (data.code == 1) {
-      orderformState.value = data.list.map((item: any) => ({
+      orderformState.value = data.data.map((item: any) => ({
         id: item.id,
-        name: item.name,
-        hospital_name: item.hospital_name,
+        aname: item.name,
+        hospital_name: item.hospitalName,
         combo: item.combo,
-        dept_name: item.dept_name,
-        doctor_name: item.doctor_name,
+        dept_name: item.deptName,
+        doctor_name:item.doctorName,
         appointmentTime: item.appointmentTime,
         isFinished: item.isFinished,
       }));
+
     } else {
       proxy.$message.warning('读取订单列表数据失败。');
     }
@@ -156,41 +161,42 @@ const state = reactive({
 
 const searchInput = ref();
 
-const columns = (roleid === '1' || roleid === '2') ? [
-  {
-    title: '患者姓名',
-    dataIndex: 'name',
-    key: 'name',
-    customFilterDropdown: true,
-    onFilter: (value, record) => record.name.toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: visible => {
-      if (visible) {
-        setTimeout(() => {
-          searchInput.value.focus();
-        }, 100);
-      }
+const columns = (roleid==='1'||roleid==='2')?[
+    {
+      title: '患者姓名',
+      dataIndex: 'aname',
+      key: 'aname',
+      customFilterDropdown: true,
+      onFilter: (value, record) => record.name.toString().toLowerCase().includes(value.toLowerCase()),
+      onFilterDropdownOpenChange: visible => {
+        if (visible) {
+          setTimeout(() => {
+            searchInput.value.focus();
+          }, 100);
+        }
+      },
     },
-  },
-  {
-    title: '预约类型',
-    dataIndex: 'dept_name',
-    key: 'dept_name',
-  },
-  {
-    title: '体检套餐',
-    dataIndex: 'combo',
-    key: 'combo',
-  },
-  {
-    title: '预约时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
-  },
-  {
-    title: '操作',
-    key: 'finish',
-  }
-] : [
+    {
+      title: '预约类型',
+      dataIndex: 'dept_name',
+      key: 'dept_name',
+    },
+    {
+      title: '体检套餐',
+      dataIndex: 'combo',
+      key: 'combo',
+    },
+    {
+      title: '预约时间',
+      dataIndex: 'appointmentTime',
+      key: 'appointmentTime',
+    },
+    {
+      title: '操作',
+      key: 'finish',
+    }
+  ]
+  :[
   {
     title: '体检机构',
     dataIndex: 'hospital_name',
