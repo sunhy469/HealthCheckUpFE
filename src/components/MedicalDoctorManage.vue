@@ -74,25 +74,27 @@ const id = localStorage.getItem('id');
 
 interface OrderFormState {
   username: string;
-  institution: string;
-  setMeal: string;
-  type: string;
-  createTime: string;
+  hospital_name: string;
+  combo: string;
+  dept_name: string;
+  appointmentTime: string;
+  doctor_name: string;
 }
 
 const orderformState = ref<OrderFormState[]>([]);
 
 const obtainDataMethodFororderList = async () => {
   try {
-    let { data } = await proxy.$axios.post('order/doctorManage', { id });
+    let { data } = await proxy.$axios.post('main/doctorManage', { id });
     if (data.code == 1) {
       // 假设 data.list 是获取到的订单列表数据
       orderformState.value = data.list.map((item: any) => ({
         username: item.username,
-        institution: item.institution,
-        setMeal: item.setMeal,
-        type: item.type,
-        createTime: item.createTime,
+        hospital_name: item.hospital_name,
+        combo: item.combo,
+        dept_name: item.dept_name,
+        appointmentTime: item.appointmentTime,
+        doctor_name:item.doctor_name,
       }));
     } else {
       proxy.$message.warning('读取订单列表数据失败。');
