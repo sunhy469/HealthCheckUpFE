@@ -15,11 +15,11 @@ interface OrderFormState {
 const orderformState = ref<OrderFormState[]>([]);
 
 const { proxy } = getCurrentInstance();
-const username = localStorage.getItem("username");
+const id = localStorage.getItem("id");
 
 const obtainDataMethodFororderList = async () => {
   try {
-    let { data } = await proxy.$axios.post("order/orderlist", { username });
+    let { data } = await proxy.$axios.post("order/orderlist", { id });
     if (data.code == 1) {
       // 假设 data.list 是获取到的订单列表数据
       orderformState.value = data.list.map((item: any) => ({
@@ -37,6 +37,7 @@ const obtainDataMethodFororderList = async () => {
     console.log("error:", error);
   }
 }
+
 
 onMounted(() => {
   obtainDataMethodFororderList();

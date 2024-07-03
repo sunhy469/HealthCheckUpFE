@@ -29,7 +29,7 @@
           />
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" @click="onSubmit">提交</a-button>
+          <a-button :disabled="disabled" type="primary" @click="onSubmit">提交</a-button>
           <a-button style="margin-left: 8px" @click="resetForm">重置</a-button>
         </a-form-item>
       </a-form>
@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import dayjs, {Dayjs} from 'dayjs';
-import {getCurrentInstance, ref} from 'vue';
+import {computed, getCurrentInstance, ref} from 'vue';
 import type {CascaderProps} from 'ant-design-vue';
 import {useRouter} from "vue-router";
 
@@ -423,6 +423,11 @@ const resetForm = () => {
   cascaderValue.value = [];
   appointmentTime.value = null;
 };
+
+const disabled = computed(() => {
+  return !(cascaderValue.value.length === 4 && appointmentTime.value);
+});
+
 </script>
 
 <style scoped>

@@ -1,8 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 
 const SigninView = () => import('../views/SigninView.vue')
 const MainView = () => import('../views/MainView.vue')
 const RegisterView = () => import('../views/RegisterView.vue')
+const ForgetPasswordView = () => import('../views/ForgetPasswordView.vue')
 const UserInfo = () => import('../components/UserInfo.vue')
 const UserManage = () => import('../components/UserManage.vue')
 const MedicalUserInfo = () => import('../components/MedicalUserInfo.vue')
@@ -94,6 +95,14 @@ const router = createRouter({
             meta: {
                 title: '注册'
             }
+        },
+        {
+            path: '/ForgetPassword',
+            name: 'ForgetPassword',
+            component: ForgetPasswordView,
+            meta: {
+                title: '修改密码'
+            }
         }
     ]
 })
@@ -101,7 +110,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const currentUserString = localStorage.getItem('roleid')
     if (to.name !== 'signin' && to.name !== 'register' && currentUserString == null) {
-        next({ path: '/signin' })
+        next({path: '/signin'})
     } else {
         next()
     }

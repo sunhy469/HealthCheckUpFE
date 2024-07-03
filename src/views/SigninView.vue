@@ -1,108 +1,98 @@
 <template>
-  <h2 class="login-title">登陆页面</h2>
-  <a-card style="width: 500px; height: 400px; position: relative; left: 33%">
-    <a-tabs centered class="mytabs" v-model:activeKey="activeKey">
-      <a-tab-pane key="1" tab="用户名登入">
-        <div class="login-container">
-          <a-form :model="userformState" name="normal_login" class="login-form"
-                  @finishFailed="onFinishFailed">
-            <a-form-item label="账号" name="username"
-                         :rules="[{ required: true, message: '请输入你的账号!' }]">
-              <a-input v-model:value="userformState.username">
-                <template #prefix>
-                  <UserOutlined class="site-form-item-icon"/>
-                </template>
-              </a-input>
-            </a-form-item>
-
-            <a-form-item label="密码" name="password"
-                         :rules="[{ required: true, message: '请输入你的密码!' }]">
-              <a-input-password v-model:value="userformState.password">
-                <template #prefix>
-                  <LockOutlined class="site-form-item-icon"/>
-                </template>
-              </a-input-password>
-            </a-form-item>
-
-            <a-form-item>
-              <a-form-item name="remember" no-style>
-                <a-checkbox v-model:checked="userformState.remember">记住我&nbsp;&nbsp;&nbsp;&nbsp;</a-checkbox>
+  <div class="login-page-container">
+    <h2 class="login-title">登陆页面</h2>
+    <a-card class="login-card">
+      <a-tabs centered class="mytabs" v-model:activeKey="activeKey">
+        <a-tab-pane key="1" tab="用户名登入">
+          <div class="login-container">
+            <a-form :model="userformState" name="normal_login" class="login-form" @finishFailed="onFinishFailed">
+              <a-form-item label="账号" name="username" :rules="[{ required: true, message: '请输入你的账号!' }]">
+                <a-input v-model:value="userformState.username">
+                  <template #prefix>
+                    <UserOutlined class="site-form-item-icon"/>
+                  </template>
+                </a-input>
               </a-form-item>
-              <a class="login-form-forgot" href="">忘记密码</a>
-            </a-form-item>
-
-            <a-form-item class="mybutton">
-              <a-button :disabled="disabled1" type="primary"  @click="SigninUserMethod" html-type="submit" class="login-form-button">
-                登入
-              </a-button>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <a-button type="primary" @click="goToRegister" html-type="submit" class="login-form-button">
-                注册
-              </a-button>
-            </a-form-item>
-
-          </a-form>
-        </div>
-      </a-tab-pane>
-
-      <a-tab-pane key="2" tab="手机号登入">
-        <div class="login-container">
-          <a-form :model="phoneformState" name="phone_login" class="login-form"
-                  @finishFailed="onFinishFailed">
-            <a-form-item label="手机号" name="mobile"
-                         :rules="[{ required: true, message: '请输入你的手机号!' }]" @blur='checkMethodFormobile()'>
-              <a-input v-model:value="phoneformState.mobile">
-                <template #prefix>
-                  <UserOutlined class="site-form-item-icon"/>
-                </template>
-              </a-input>
-            </a-form-item>
-
-            <a-form-item label="验证码" name="captcha"
-                         :rules="[{ required: true, message: '请输入你的验证码!' }]" @blur='checkcaptcha()'>
-              <a-row gutter="8">
-                <a-col span="15">
-                  <a-input v-model:value="phoneformState.captcha"/>
-                </a-col>
-                <a-col span="9">
-                  <a-button @click="sendcaptcha">发送验证码</a-button>
-                </a-col>
-              </a-row>
-            </a-form-item>
-            <a-form-item>
-              <a-form-item name="remember" no-style>
-                <a-checkbox v-model:checked="phoneformState.remember">记住我&nbsp;&nbsp;&nbsp;&nbsp;</a-checkbox>
+              <a-form-item label="密码" name="password" :rules="[{ required: true, message: '请输入你的密码!' }]">
+                <a-input-password v-model:value="userformState.password">
+                  <template #prefix>
+                    <LockOutlined class="site-form-item-icon"/>
+                  </template>
+                </a-input-password>
               </a-form-item>
-            </a-form-item>
-            <a-form-item class="mybutton">
-              <a-button :disabled="disabled2" type="primary" html-type="submit" @click="SigninPhoneMethod" class="login-form-button">
-                登入
-              </a-button>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <a-button type="primary" @click="goToRegister" html-type="submit" class="login-form-button">
-                注册
-              </a-button>
-            </a-form-item>
-          </a-form>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
-  </a-card>
+              <a-form-item>
+                <div class="options-container">
+                  <a-form-item name="remember" no-style>
+                    <a-checkbox v-model:checked="userformState.remember">记住我</a-checkbox>
+                  </a-form-item>
+                  <a class="login-form-forgot" href="" @click.prevent="forgetPassword">忘记密码</a>
+                </div>
+              </a-form-item>
+              <a-form-item class="mybutton">
+                <a-button :disabled="disabled1" type="primary" @click="SigninUserMethod" html-type="submit" class="login-form-button">登入</a-button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a-button type="primary" @click="goToRegister" html-type="submit" class="login-form-button">注册</a-button>
+              </a-form-item>
+            </a-form>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="手机号登入">
+          <div class="login-container">
+            <a-form :model="phoneformState" name="phone_login" class="login-form" @finishFailed="onFinishFailed">
+              <a-form-item label="手机号" name="mobile" :rules="[{ required: true, message: '请输入你的手机号!' }]" @blur='checkMethodFormobile()'>
+                <a-input v-model:value="phoneformState.mobile">
+                  <template #prefix>
+                    <UserOutlined class="site-form-item-icon"/>
+                  </template>
+                </a-input>
+              </a-form-item>
+              <a-form-item label="验证码" name="captcha" :rules="[{ required: true, message: '请输入你的验证码!' }]" @blur='checkcaptcha()'>
+                <a-row gutter="8">
+                  <a-col span="15">
+                    <a-input v-model:value="phoneformState.captcha"/>
+                  </a-col>
+                  <a-col span="9">
+                    <a-button @click="sendcaptcha">发送验证码</a-button>
+                  </a-col>
+                </a-row>
+              </a-form-item>
+              <a-form-item>
+                <div class="options-container">
+                  <a-form-item name="remember" no-style>
+                    <a-checkbox v-model:checked="phoneformState.remember">记住我</a-checkbox>
+                  </a-form-item>
+                </div>
+              </a-form-item>
+              <a-form-item class="mybutton">
+                <a-button :disabled="disabled2" type="primary" html-type="submit" @click="SigninPhoneMethod" class="login-form-button">登入</a-button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a-button type="primary" @click="goToRegister" html-type="submit" class="login-form-button">注册</a-button>
+              </a-form-item>
+            </a-form>
+          </div>
+        </a-tab-pane>
+      </a-tabs>
+    </a-card>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import {reactive, computed, getCurrentInstance, ref} from 'vue';
+import { reactive, computed, getCurrentInstance, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import '../assets/signin.css';
 
 const activeKey = ref('1');
-import {UserOutlined, LockOutlined} from '@ant-design/icons-vue';
+import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
 const goToRegister = () => {
   router.push({ path: '/register' });
 };
 
 const { proxy } = getCurrentInstance();
+
+const forgetPassword = () => {
+  router.push({ path: '/ForgetPassword' });
+};
 
 const checkMethodFormobile = async () => {
   try {
@@ -139,8 +129,8 @@ const SigninUserMethod = async () => {
 const SigninPhoneMethod = async () => {
   try {
     let { data } = await proxy.$axios.post("/user/login", {
-      mobile : phoneformState.mobile,
-      captcha : phoneformState.captcha
+      mobile: phoneformState.mobile,
+      captcha: phoneformState.captcha
     });
     if (data.code == 1 ) {
       localStorage.setItem('id', data.data.id)
@@ -156,7 +146,6 @@ const SigninPhoneMethod = async () => {
   }
 };
 
-
 const checkcaptcha = async () => {
   try {
     let { data: { code, msg, entity } } = await proxy.$axios.post("user/checkcaptcha", 'captcha=' + phoneformState.captcha);
@@ -170,7 +159,6 @@ const checkcaptcha = async () => {
     proxy.$message.warning(`系统繁忙。请稍后。`);
   }
 };
-
 
 interface UserFormState {
   username: string;
@@ -200,7 +188,7 @@ const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
 };
 
-const sendcaptcha = async() => {
+const sendcaptcha = async () => {
   let { data } = await proxy.$axios.post("user/captcha", phoneformState);
   proxy.$message.success(`发送验证码成功！`);
 };
