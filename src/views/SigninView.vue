@@ -143,9 +143,9 @@ const SigninPhoneMethod = async () => {
       captcha : phoneformState.captcha
     });
     if (data.code == 1 ) {
-      sessionStorage.setItem("id",data.data.id)
       localStorage.setItem('id', data.data.id)
       localStorage.setItem('roleid', data.data.roleId)
+      localStorage.setItem('token', data.data.token)
       router.push({ path: '/main' });
       proxy.$message.success(`登录成功！`);
     } else {

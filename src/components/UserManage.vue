@@ -42,9 +42,9 @@
         <a-col :span="12">
           <a-form-item label="用户类型" name="roleid" v-if="roleid==2">
             <a-radio-group v-model:value="form.roleid" button-style="solid">
-              <a-radio-button value="0">普通用户</a-radio-button>
-              <a-radio-button value="1">医生</a-radio-button>
-              <a-radio-button value="2">管理员</a-radio-button>
+              <a-radio-button value='0'>普通用户</a-radio-button>
+              <a-radio-button value='1'>医生</a-radio-button>
+              <a-radio-button value='2'>管理员</a-radio-button>
             </a-radio-group>
           </a-form-item>
         </a-col>
@@ -107,7 +107,7 @@ const form = ref({
   name: '',
   sex: '',
   mobile: '',
-  password: '',
+  password: null,
   roleid: ''
 });
 
@@ -124,7 +124,7 @@ const onClose = () => {
 //编辑信息
 const edit = async () => {
   try {
-    const { data } = await axios.post("user/editinfo", form.value);
+    const { data } = await axios.post("user/editinfo", form.value,{headers: {token: localStorage.getItem('token')}});
     if (data.code === 1) {
       window.location.reload();
     } else {
@@ -138,7 +138,7 @@ const edit = async () => {
 //删除与批量删除
 const deleteRecord = async (key: string) => {
   try {
-    const { data } = await axios.post("user/delete", { key });
+    const { data } = await axios.post("user/delete", { key },{headers: {token: localStorage.getItem('token')}});
     if (data.code === 1) {
       window.location.reload();
     } else {
@@ -152,7 +152,7 @@ const deleteRecord = async (key: string) => {
 
 const deleteSelectedRecords = async () => {
   try {
-    const { data } = await axios.post("user/deleteBatch", { keys: selectedRowKeys.value });
+    const { data } = await axios.post("user/deleteBatch", { keys: selectedRowKeys.value },{headers: {token: localStorage.getItem('token')}});
     if (data.code === 1) {
       window.location.reload();
     } else {

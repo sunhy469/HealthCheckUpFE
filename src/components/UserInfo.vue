@@ -49,7 +49,7 @@ const onClose = () => {
 
 const edit = async () => {
   try {
-    let { data } = await proxy.$axios.post("user/editinfo", form);
+    let { data } = await proxy.$axios.post("user/editinfo", form,{headers: {token: localStorage.getItem('token')}});
     if (data.code == 1) {
       window.location.reload();
     } else {
@@ -66,9 +66,7 @@ onMounted(() => {
 const { proxy } = getCurrentInstance();
 const obtainDataMethodForUserInfo = async () => {
   try {
-    let { data } = await proxy.$axios.post("user/getinfo", {
-      id
-    });
+    let { data } = await proxy.$axios.post("user/getinfo", {id},{headers: {token: localStorage.getItem('token')}});
     if (data.code == 1) {
       formState.username = data.data.username
       formState.name = data.data.name
@@ -76,8 +74,8 @@ const obtainDataMethodForUserInfo = async () => {
       formState.roleId = data.data.roleId
       formState.createTime = data.data.createTime
       formState.mobile = data.data.mobile
-      form.name= formState.name,
-      form.sex= formState.sex,
+      form.name= formState.name
+      form.sex= formState.sex
       form.mobile= formState.mobile
     } else {
       proxy.$message.warning(`读取用户列表数据失败。`)
