@@ -120,7 +120,6 @@ const orderFinish = (record: OrderFormState) => {
         }
       } catch (error) {
         message.error('系统繁忙。请稍后。');
-        console.log("error:", error);
       }
     },
     onCancel() {

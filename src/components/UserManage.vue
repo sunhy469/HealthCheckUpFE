@@ -11,7 +11,7 @@
       <template v-if="column.key === 'operation'">
         <a-button @click="() => showDrawer(record)" v-if="roleid == 1">显示详细信息</a-button>
         <a-button @click="() => showDrawer(record)" v-if="roleid == 2">修改</a-button>
-        <a-button @click="() => deleteRecord(record.key)" v-if="roleid == 2">删除</a-button>
+        <a-button @click="() => deleteRecord(record)" v-if="roleid == 2">删除</a-button>
       </template>
     </template>
   </a-table>
@@ -117,7 +117,7 @@ const form = ref({
   name: '',
   sex: 0,
   mobile: '',
-  password: '',
+  password: null,
   roleId: ''
 });
 
@@ -146,10 +146,12 @@ const edit = async () => {
     console.log("error:", error);
   }
 };
-//删除与批量删除
-const deleteRecord = async (key: string) => {
+//删除
+const deleteRecord = async (record) => {
   try {
-    const { data } = await axios.post("user/delete", { key },{headers: {token: localStorage.getItem('token')}});
+    const { data } = await axios.post("user/delete", {
+      id : record.id
+    },{headers: {token: localStorage.getItem('token')}});
     if (data.code === 1) {
       window.location.reload();
     } else {

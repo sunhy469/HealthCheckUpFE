@@ -225,7 +225,7 @@ const onSubmit = async () => {
     const [,,, doctor_id] = cascaderValue.value;
     const requestData = {
       userId : localStorage.getItem('id'),
-      doctorId : 0,
+      doctorId : '',
       appointmentTime: appointmentTime.value ? appointmentTime.value.format('YYYY-MM-DD HH:mm:ss') : null,
       doctorName: doctor_id,
     };

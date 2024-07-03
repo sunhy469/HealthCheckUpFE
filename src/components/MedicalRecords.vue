@@ -4,7 +4,7 @@
       hoverable
       headStyle="background-color: #91caff"
   >
-    <a-table :data-source="data" :columns="columns">
+    <a-table :data-source="orderformState" :columns="columns">
       <template #headerCell="{ column }">
         <template v-if="column.key === 'aname'">
           <span style="color: #1890ff">患者姓名</span>
@@ -96,7 +96,7 @@ const orderformState = ref<OrderFormState[]>([]);
 
 const obtainDataMethodFororderList = async () => {
   try {
-    let { data } = await proxy.$axios.post('home/recordtoday',
+    let { data } = await proxy.$axios.post('home/recordall',
         {
           id : currentid , // 用户Id
           roleId : roleid

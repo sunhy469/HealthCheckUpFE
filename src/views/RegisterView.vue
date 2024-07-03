@@ -92,7 +92,6 @@ const registerMethod = async () => {
       password: registerFormState.password,
     });
     if (data.code == 1) {
-      sessionStorage.setItem("id", data.data.id)
       localStorage.setItem('id', data.data.id)
       localStorage.setItem('roleid', data.roleId)
       proxy.$message.success(`注册成功！`);
