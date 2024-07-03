@@ -4,7 +4,7 @@
       hoverable
       headStyle="background-color: #91caff"
   >
-    <a-table :data-source="orderformState" :columns="columns">
+    <a-table :data-source="data" :columns="columns">
       <template #headerCell="{ column }">
         <template v-if="column.key === 'aname'">
           <span style="color: #1890ff">患者姓名</span>
@@ -230,85 +230,85 @@ const handleReset = clearFilters => {
   state.searchText = '';
 };
 
-// const data = [
-//   {
-//     aname: '王小明',
-//     dept_name: '常规体检',
-//     combo: '基础套餐',
-//     createTime: '2024-07-01 09:00:00',
-//     isFinished: 0
-//   },
-//   {
-//     aname: '王小明',
-//     dept_name: '入职体检',
-//     combo: '高级套餐',
-//     createTime: '2024-07-01 10:00:00',
-//     isFinished: 0
-//   },
-//   {
-//     aname: '张三',
-//     dept_name: '常规体检',
-//     combo: '基础套餐',
-//     createTime: '2024-07-02 08:30:00',
-//     isFinished: 0
-//   },
-//   {
-//     aname: '李四',
-//     dept_name: '入职体检',
-//     combo: '高级套餐',
-//     createTime: '2024-07-02 11:00:00',
-//     isFinished: 0
-//   },
-//   {
-//     aname: '王五',
-//     dept_name: '常规体检',
-//     combo: '基础套餐',
-//     createTime: '2024-07-03 09:30:00',
-//     isFinished: 0
-//   },
-//   {
-//     aname: '赵六',
-//     dept_name: '常规体检',
-//     combo: '高级套餐',
-//     createTime: '2024-07-03 10:30:00',
-//     isFinished: 0
-//   },
-//   {
-//     aname: '孙七',
-//     dept_name: '入职体检',
-//     combo: '基础套餐',
-//     createTime: '2024-07-04 08:00:00',
-//     isFinished: 0
-//   },
-//   {
-//     aname: '周八',
-//     dept_name: '入职体检',
-//     combo: '高级套餐',
-//     createTime: '2024-07-04 10:45:00',
-//     isFinished: 1
-//   },
-//   {
-//     aname: '吴九',
-//     dept_name: '常规体检',
-//     combo: '基础套餐',
-//     createTime: '2024-07-05 09:15:00',
-//     isFinished: 1
-//   },
-//   {
-//     aname: '郑十',
-//     dept_name: '入职体检',
-//     combo: '高级套餐',
-//     createTime: '2024-07-05 11:30:00',
-//     isFinished: 0
-//   },
-//   {
-//     aname: '木十一',
-//     dept_name: '入职体检',
-//     combo: '高级套餐',
-//     createTime: '2024-07-06 11:30:00',
-//     isFinished: 1
-//   }
-// ];
+const data = [
+  {
+    aname: '王小明',
+    dept_name: '常规体检',
+    combo: '基础套餐',
+    createTime: '2024-07-01 09:00:00',
+    isFinished: 0
+  },
+  {
+    aname: '王小明',
+    dept_name: '入职体检',
+    combo: '高级套餐',
+    createTime: '2024-07-01 10:00:00',
+    isFinished: 0
+  },
+  {
+    aname: '张三',
+    dept_name: '常规体检',
+    combo: '基础套餐',
+    createTime: '2024-07-02 08:30:00',
+    isFinished: 0
+  },
+  {
+    aname: '李四',
+    dept_name: '入职体检',
+    combo: '高级套餐',
+    createTime: '2024-07-02 11:00:00',
+    isFinished: 0
+  },
+  {
+    aname: '王五',
+    dept_name: '常规体检',
+    combo: '基础套餐',
+    createTime: '2024-07-03 09:30:00',
+    isFinished: 0
+  },
+  {
+    aname: '赵六',
+    dept_name: '常规体检',
+    combo: '高级套餐',
+    createTime: '2024-07-03 10:30:00',
+    isFinished: 0
+  },
+  {
+    aname: '孙七',
+    dept_name: '入职体检',
+    combo: '基础套餐',
+    createTime: '2024-07-04 08:00:00',
+    isFinished: 0
+  },
+  {
+    aname: '周八',
+    dept_name: '入职体检',
+    combo: '高级套餐',
+    createTime: '2024-07-04 10:45:00',
+    isFinished: 1
+  },
+  {
+    aname: '吴九',
+    dept_name: '常规体检',
+    combo: '基础套餐',
+    createTime: '2024-07-05 09:15:00',
+    isFinished: 1
+  },
+  {
+    aname: '郑十',
+    dept_name: '入职体检',
+    combo: '高级套餐',
+    createTime: '2024-07-05 11:30:00',
+    isFinished: 0
+  },
+  {
+    aname: '木十一',
+    dept_name: '入职体检',
+    combo: '高级套餐',
+    createTime: '2024-07-06 11:30:00',
+    isFinished: 1
+  }
+];
 
 </script>
 
