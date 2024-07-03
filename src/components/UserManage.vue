@@ -5,19 +5,20 @@
       headStyle="background-color: #91caff"
       style="min-height: 350px "
   >
-  <a-table :columns="columns" :data-source="dataSource" :scroll="{ x: 1500, y: 900 }" bordered
-    :pagination="pagination" :loading="loading" @change="handleTableChange">
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'operation'">
-        <a-button @click="() => showDrawer(record)" v-if="roleid == 1">显示详细信息</a-button>
-        <a-button @click="() => showDrawer(record)" v-if="roleid == 2">修改</a-button>
-        <a-button @click="() => deleteRecord(record)" v-if="roleid == 2">删除</a-button>
+    <a-table :columns="columns" :data-source="dataSource" :scroll="{ x: 1500, y: 900 }" bordered
+             :pagination="pagination" :loading="loading" @change="handleTableChange">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'operation'">
+          <a-button @click="() => showDrawer(record)" v-if="roleid == 1">显示详细信息</a-button>
+          <a-button @click="() => showDrawer(record)" v-if="roleid == 2">修改</a-button>
+          <a-button @click="() => deleteConfirm(record)" v-if="roleid == 2">删除</a-button>
+        </template>
       </template>
-    </template>
-  </a-table>
+    </a-table>
   </a-card>
+
   <a-drawer title="详细信息" :width="600" :open="open" :body-style="{ paddingBottom: '80px' }"
-    :footer-style="{ textAlign: 'right' }" @close="onClose">
+            :footer-style="{ textAlign: 'right' }" @close="onClose">
     <a-form :model="form" layout="vertical">
       <a-row :gutter="16">
         <a-col :span="12">
@@ -57,7 +58,7 @@
         </a-col>
         <a-col :span="12">
           <a-form-item label="所在科室" name="deptid" v-if="form.roleId=='1'">
-            <a-cascader v-model:value="value":options="options":load-data="loadData"placeholder="Please select" change-on-select/>
+            <a-cascader v-model:value="value" :options="options" :load-data="loadData" placeholder="Please select" change-on-select/>
           </a-form-item>
         </a-col>
       </a-row>
@@ -69,18 +70,27 @@
       </a-space>
     </template>
   </a-drawer>
+
+  <a-modal
+      title="确认删除"
+      v-model:open="showDeleteConfirm"
+      @ok="confirmDelete"
+      @cancel="cancelDelete"
+  >
+    <p>确定要删除这条记录吗？</p>
+  </a-modal>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, unref } from 'vue';
-import type { TableColumnsType, TableProps,CascaderProps  } from 'ant-design-vue';
+import type { TableColumnsType, TableProps, CascaderProps } from 'ant-design-vue';
 import { usePagination } from 'vue-request';
 import { Table } from 'ant-design-vue';
 import axios from 'axios';
 //const { proxy } = getCurrentInstance();
 
 let roleid = Number(localStorage.getItem('roleid'))
-let access2 = roleid == 2?false:true
+let access2 = roleid == 2 ? false : true
 const columns: TableColumnsType = [
   { title: '用户名', width: 100, dataIndex: 'username', key: 'username', fixed: 'left' },
   { title: '真实姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
@@ -112,6 +122,9 @@ const columns: TableColumnsType = [
 
 const currentRecord = ref<any>(null);
 const open = ref<boolean>(false);//抽屉状态
+const showDeleteConfirm = ref<boolean>(false); // 删除确认对话框状态
+const recordToDelete = ref<any>(null); // 要删除的记录
+
 //提交表单
 const form = ref({
   name: '',
@@ -132,10 +145,41 @@ const showDrawer = (record: any) => {
 const onClose = () => {
   open.value = false;
 };
+
+//显示删除确认对话框
+const deleteConfirm = (record: any) => {
+  recordToDelete.value = record.id;
+  showDeleteConfirm.value = true
+};
+
+//确认删除
+const confirmDelete = async () => {
+  showDeleteConfirm.value = false;
+  if (recordToDelete.value) {
+    try {
+      const { data } = await axios.post("user/delete", { id: recordToDelete.value }, { headers: { token: localStorage.getItem('token') } });
+      if (data.code === 1) {
+        window.location.reload();
+      } else {
+        proxy.$message.warning(`删除失败。`);
+      }
+    } catch (error) {
+      proxy.$message.warning(`系统繁忙。请稍后。`);
+      console.log("error:", error);
+    }
+  }
+};
+
+//取消删除
+const cancelDelete = () => {
+  showDeleteConfirm.value = false;
+  recordToDelete.value = null;
+};
+
 //编辑信息
 const edit = async () => {
   try {
-    const { data } = await axios.post("user/editinfo", form.value,{headers: {token: localStorage.getItem('token')}});
+    const { data } = await axios.post("user/editinfo", form.value, { headers: { token: localStorage.getItem('token') } });
     if (data.code === 1) {
       window.location.reload();
     } else {
@@ -146,36 +190,7 @@ const edit = async () => {
     console.log("error:", error);
   }
 };
-//删除
-const deleteRecord = async (record) => {
-  try {
-    const { data } = await axios.post("user/delete", {
-      id : record.id
-    },{headers: {token: localStorage.getItem('token')}});
-    if (data.code === 1) {
-      window.location.reload();
-    } else {
-      proxy.$message.warning(`删除失败。`);
-    }
-  } catch (error) {
-    proxy.$message.warning(`系统繁忙。请稍后。`);
-    console.log("error:", error);
-  }
-};
 
-const deleteSelectedRecords = async () => {
-  try {
-    const { data } = await axios.post("user/deleteBatch", { keys: selectedRowKeys.value },{headers: {token: localStorage.getItem('token')}});
-    if (data.code === 1) {
-      window.location.reload();
-    } else {
-      proxy.$message.warning(`批量删除失败。`);
-    }
-  } catch (error) {
-    proxy.$message.warning(`系统繁忙。请稍后。`);
-    console.log("error:", error);
-  }
-};
 //请求格式
 type APIParams = {
   results: number;
@@ -197,14 +212,7 @@ type APIResult = {
     lastLoginTime: string;
   }[];
 };
-//请求数据（老）
-// const queryData = async (params: APIParams) => {
-//   if(roleid == 1)
-//     return axios.get<APIResult>('/user/getpatient', { params });
-//   else
-//     return axios.get<APIResult>('/user/getall', { params });
-// };
-//返回数据写入
+
 const {
   data: dataSource,
   run,
@@ -251,9 +259,9 @@ const pagination = computed(() => ({
 }));
 
 const handleTableChange: TableProps['onChange'] = (
-  pag: { pageSize: number; current: number },
-  filters: any,
-  sorter: any,
+    pag: { pageSize: number; current: number },
+    filters: any,
+    sorter: any,
 ) => {
   run({
     results: pag.pageSize,
@@ -263,56 +271,4 @@ const handleTableChange: TableProps['onChange'] = (
     ...filters,
   });
 };
-//表格多选框
-// const selectedRowKeys = ref<string[]>([]);
-// const onSelectChange = (changableRowKeys: string[]) => {
-//   console.log('selectedRowKeys changed: ', changableRowKeys);
-//   selectedRowKeys.value = changableRowKeys;
-// };
-
-// const rowSelection = computed(() => ({
-//   selectedRowKeys: unref(selectedRowKeys),
-//   onChange: onSelectChange,
-//   hideDefaultSelections: true,
-//   selections: [
-//     Table.SELECTION_ALL,
-//     Table.SELECTION_INVERT,
-//     Table.SELECTION_NONE,
-//   ],
-// }));
-// //动态级联选择器
-// const options = ref<CascaderProps['options']>([
-//   {
-//     value: 'zhejiang',
-//     label: 'Zhejiang',
-//     isLeaf: false,
-//   },
-//   {
-//     value: 'jiangsu',
-//     label: 'Jiangsu',
-//     isLeaf: false,
-//   },
-// ]);
-
-// const loadData: CascaderProps['loadData'] = selectedOptions => {
-//   const targetOption = selectedOptions[selectedOptions.length - 1];
-//   targetOption.loading = true;
-
-//   setTimeout(() => {
-//     targetOption.loading = false;
-//     targetOption.children = [
-//       {
-//         label: `${targetOption.label} Dynamic 1`,
-//         value: 'dynamic1',
-//       },
-//       {
-//         label: `${targetOption.label} Dynamic 2`,
-//         value: 'dynamic2',
-//       },
-//     ];
-//     options.value = [...options.value];
-//   }, 1000);
-// };
-
-// const value = ref<string[]>([]);
 </script>
