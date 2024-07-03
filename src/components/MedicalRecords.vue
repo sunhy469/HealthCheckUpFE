@@ -4,9 +4,9 @@
       hoverable
       headStyle="background-color: #91caff"
   >
-    <a-table :data-source="data" :columns="columns">
+    <a-table :data-source="orderformState" :columns="columns">
       <template #headerCell="{ column }">
-        <template v-if="column.key === 'username'">
+        <template v-if="column.key === 'name'">
           <span style="color: #1890ff">患者姓名</span>
         </template>
       </template>
@@ -70,10 +70,12 @@ import { getCurrentInstance, onMounted, reactive, ref } from 'vue';
 import { message, Modal } from 'ant-design-vue';
 
 const { proxy } = getCurrentInstance();
-const id = localStorage.getItem('id');
+const currentid = localStorage.getItem('id');
+const roleid = localStorage.getItem('roleid');
 
 interface OrderFormState {
-  username: string;
+  id: number;
+  name: string;
   hospital_name: string;
   combo: string;
   dept_name: string;
@@ -85,16 +87,16 @@ const orderformState = ref<OrderFormState[]>([]);
 
 const obtainDataMethodFororderList = async () => {
   try {
-    let { data } = await proxy.$axios.post('main/doctorManage', { id });
+    let { data } = await proxy.$axios.post('main/doctorManage', { currentid,roleid });
     if (data.code == 1) {
-      // 假设 data.list 是获取到的订单列表数据
       orderformState.value = data.list.map((item: any) => ({
-        username: item.username,
+        id: item.id,
+        name: item.name,
         hospital_name: item.hospital_name,
         combo: item.combo,
         dept_name: item.dept_name,
-        appointmentTime: item.appointmentTime,
         doctor_name:item.doctor_name,
+        appointmentTime: item.appointmentTime,
       }));
     } else {
       proxy.$message.warning('读取订单列表数据失败。');
@@ -111,10 +113,9 @@ const orderFinish = (record: OrderFormState) => {
     content: `您确认完成该订单吗？`,
     onOk: async () => {
       try {
-        let { data } = await proxy.$axios.post('order/finishOrder', { id: record.username });
+        let { data } = await proxy.$axios.post('main/finishrecord', { id: record.id });
         if (data.code == 1) {
-          // 更新订单状态
-          orderformState.value = orderformState.value.filter(item => item.username !== record.username);
+          orderformState.value = orderformState.value.filter(item => item.name !== record.name);
           message.success('订单完成');
         } else {
           message.error('完成订单失败');
@@ -134,74 +135,6 @@ onMounted(() => {
   obtainDataMethodFororderList();
 });
 
-const data = [
-  {
-    username: '王小明',
-    type: '常规体检',
-    setmeal: '基础套餐',
-    createTime: '2024-07-01 09:00:00',
-  },
-  {
-    username: '王小明',
-    type: '入职体检',
-    setmeal: '高级套餐',
-    createTime: '2024-07-01 10:00:00',
-  },
-  {
-    username: '张三',
-    type: '常规体检',
-    setmeal: '基础套餐',
-    createTime: '2024-07-02 08:30:00',
-  },
-  {
-    username: '李四',
-    type: '入职体检',
-    setmeal: '高级套餐',
-    createTime: '2024-07-02 11:00:00',
-  },
-  {
-    username: '王五',
-    type: '常规体检',
-    setmeal: '基础套餐',
-    createTime: '2024-07-03 09:30:00',
-  },
-  {
-    username: '赵六',
-    type: '常规体检',
-    setmeal: '高级套餐',
-    createTime: '2024-07-03 10:30:00',
-  },
-  {
-    username: '孙七',
-    type: '入职体检',
-    setmeal: '基础套餐',
-    createTime: '2024-07-04 08:00:00',
-  },
-  {
-    username: '周八',
-    type: '入职体检',
-    setmeal: '高级套餐',
-    createTime: '2024-07-04 10:45:00',
-  },
-  {
-    username: '吴九',
-    type: '常规体检',
-    setmeal: '基础套餐',
-    createTime: '2024-07-05 09:15:00',
-  },
-  {
-    username: '郑十',
-    type: '入职体检',
-    setmeal: '高级套餐',
-    createTime: '2024-07-05 11:30:00',
-  },
-  {
-    username: '木十一',
-    type: '入职体检',
-    setmeal: '高级套餐',
-    createTime: '2024-07-06 11:30:00',
-  }
-];
 
 const state = reactive({
   searchText: '',
@@ -210,60 +143,63 @@ const state = reactive({
 
 const searchInput = ref();
 
-const columns = [
-  {
-    title: '患者姓名',
-    dataIndex: 'username',
-    key: 'username',
-    customFilterDropdown: true,
-    onFilter: (value, record) => record.username.toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: visible => {
-      if (visible) {
-        setTimeout(() => {
-          searchInput.value.focus();
-        }, 100);
-      }
+const columns = (roleid==='1'||roleid==='2')?[
+    {
+      title: '患者姓名',
+      dataIndex: 'name',
+      key: 'name',
+      customFilterDropdown: true,
+      onFilter: (value, record) => record.name.toString().toLowerCase().includes(value.toLowerCase()),
+      onFilterDropdownOpenChange: visible => {
+        if (visible) {
+          setTimeout(() => {
+            searchInput.value.focus();
+          }, 100);
+        }
+      },
     },
-  },
-  {
-    title: '预约类型',
-    dataIndex: 'type',
-    key: 'type',
-    customFilterDropdown: true,
-    onFilter: (value, record) => record.type.toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: visible => {
-      if (visible) {
-        setTimeout(() => {
-          searchInput.value.focus();
-        }, 100);
-      }
+    {
+      title: '预约类型',
+      dataIndex: 'dept_name',
+      key: 'dept_name',
     },
+    {
+      title: '体检套餐',
+      dataIndex: 'combo',
+      key: 'combo',
+    },
+    {
+      title: '预约时间',
+      dataIndex: 'createTime',
+      key: 'createTime',
+    },
+    {
+      title: '操作',
+      key: 'finish',
+    }
+  ]
+  :[
+  {
+    title: '体检机构',
+    dataIndex: 'hospital_name',
   },
   {
     title: '体检套餐',
-    dataIndex: 'setmeal',
-    key: 'setmeal',
-    customFilterDropdown: true,
-    onFilter: (value, record) => record.setmeal.toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: visible => {
-      if (visible) {
-        setTimeout(() => {
-          searchInput.value.focus();
-        }, 100);
-      }
-    },
+    dataIndex: 'combo',
   },
   {
-    title: '预约时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
+    title: '预约类型',
+    dataIndex: 'dept_name',
   },
   {
-    title: '操作',
-    key: 'finish',
+    title: '医生姓名',
+    dataIndex: 'doctor_name',
+  },
+  {
+    title: '申请日期',
+    dataIndex: 'appointmentTime',
   }
 ];
-
 const handleSearch = (selectedKeys, confirm, dataIndex) => {
   confirm();
   state.searchText = selectedKeys[0];
@@ -274,6 +210,75 @@ const handleReset = clearFilters => {
   clearFilters({ confirm: true });
   state.searchText = '';
 };
+// const data = [
+//   {
+//     name: '王小明',
+//     dept_name: '常规体检',
+//     combo: '基础套餐',
+//     createTime: '2024-07-01 09:00:00',
+//   },
+//   {
+//     name: '王小明',
+//     dept_name: '入职体检',
+//     combo: '高级套餐',
+//     createTime: '2024-07-01 10:00:00',
+//   },
+//   {
+//     name: '张三',
+//     dept_name: '常规体检',
+//     combo: '基础套餐',
+//     createTime: '2024-07-02 08:30:00',
+//   },
+//   {
+//     name: '李四',
+//     dept_name: '入职体检',
+//     combo: '高级套餐',
+//     createTime: '2024-07-02 11:00:00',
+//   },
+//   {
+//     name: '王五',
+//     dept_name: '常规体检',
+//     combo: '基础套餐',
+//     createTime: '2024-07-03 09:30:00',
+//   },
+//   {
+//     name: '赵六',
+//     dept_name: '常规体检',
+//     combo: '高级套餐',
+//     createTime: '2024-07-03 10:30:00',
+//   },
+//   {
+//     name: '孙七',
+//     dept_name: '入职体检',
+//     combo: '基础套餐',
+//     createTime: '2024-07-04 08:00:00',
+//   },
+//   {
+//     name: '周八',
+//     dept_name: '入职体检',
+//     combo: '高级套餐',
+//     createTime: '2024-07-04 10:45:00',
+//   },
+//   {
+//     name: '吴九',
+//     dept_name: '常规体检',
+//     combo: '基础套餐',
+//     createTime: '2024-07-05 09:15:00',
+//   },
+//   {
+//     name: '郑十',
+//     dept_name: '入职体检',
+//     combo: '高级套餐',
+//     createTime: '2024-07-05 11:30:00',
+//   },
+//   {
+//     name: '木十一',
+//     dept_name: '入职体检',
+//     combo: '高级套餐',
+//     createTime: '2024-07-06 11:30:00',
+//   }
+// ];
+
 </script>
 <style scoped>
 .highlight {

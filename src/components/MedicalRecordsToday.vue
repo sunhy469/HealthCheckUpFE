@@ -16,17 +16,17 @@
       </template>
 
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'username'">
+        <template v-if="column.key === 'name'">
           <a>{{ record.username }}</a>
         </template>
-        <template v-else-if="column.key === 'type'">
-          <span>{{ record.type }}</span>
+        <template v-else-if="column.key === 'dept_name'">
+          <span>{{ record.dept_name }}</span>
         </template>
-        <template v-else-if="column.key === 'setMeal'">
-          <span>{{ record.setMeal }}</span>
+        <template v-else-if="column.key === 'combo'">
+          <span>{{ record.combo }}</span>
         </template>
-        <template v-else-if="column.key === 'createTime'">
-          <span>{{ record.createTime }}</span>
+        <template v-else-if="column.key === 'appointmentTime'">
+          <span>{{ record.appointmentTime }}</span>
         </template>
         <template v-else-if="column.key === 'finish'">
           <a-button @click="orderFinish(record)">完成</a-button>
@@ -44,18 +44,20 @@ import { message, Modal } from 'ant-design-vue';
 const router = useRouter();
 
 interface OrderFormState {
-  username: string;
-  institution: string;
-  setMeal: string;
-  type: string;
-  createTime: string;
+  id: number;
+  name: string;
+  hospital_name: string;
+  combo: string;
+  dept_name: string;
+  appointmentTime: string;
+  doctor_name: string;
 }
 
 const orderformState = ref<OrderFormState[]>([]);
 
 const { proxy } = getCurrentInstance();
-const id = localStorage.getItem("id");
-
+const currentid = localStorage.getItem("id");
+const roleid = localStorage.getItem("roleid");
 const today = new Date();
 const year = today.getFullYear();
 const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -64,15 +66,16 @@ const formattedDate = `${year}-${month}-${day}`;
 
 const obtainDataMethodFororderList = async () => {
   try {
-    let { data } = await proxy.$axios.post("order/doctorTodaylist", { id, date: formattedDate });
+    let { data } = await proxy.$axios.post("main/recordtoday", { currentid ,roleid });
     if (data.code == 1) {
-      // 假设 data.list 是获取到的订单列表数据
       orderformState.value = data.list.map((item: any) => ({
-        username: item.username,
-        institution: item.institution,
-        setMeal: item.setMeal,
-        type: item.type,
-        createTime: item.createTime
+        id: item.id,
+        name: item.name,
+        hospital_name: item.hospital_name,
+        combo: item.combo,
+        dept_name: item.dept_name,
+        doctor_name:item.doctor_name,
+        appointmentTime: item.appointmentTime,
       }));
     } else {
       proxy.$message.warning(`读取订单列表数据失败。`);
@@ -86,13 +89,12 @@ const obtainDataMethodFororderList = async () => {
 const orderFinish = (record: OrderFormState) => {
   Modal.confirm({
     title: '确认完成',
-    content: `您确认完成该订单吗？（${record.username}）`,
+    content: `您确认完成该订单吗？（${record.name}）`,
     onOk: async () => {
       try {
-        let { data } = await proxy.$axios.post("order/finishOrder", { id: record.username });
+        let { data } = await proxy.$axios.post("main/finishrecord", { id: record.id });
         if (data.code == 1) {
-          // 更新订单状态
-          orderformState.value = orderformState.value.filter(item => item.username !== record.username);
+          orderformState.value = orderformState.value.filter(item => item.id !== record.id);
           message.success('订单完成');
         } else {
           message.error('完成订单失败');
@@ -115,23 +117,23 @@ onMounted(() => {
 const columns = [
   {
     title: '患者姓名',
-    dataIndex: 'username',
-    key: 'username',
+    dataIndex: 'name',
+    key: 'name',
   },
   {
     title: '预约类型',
-    dataIndex: 'type',
-    key: 'type',
+    dataIndex: 'dept_name',
+    key: 'dept_name',
   },
   {
     title: '体检套餐',
-    dataIndex: 'setMeal',
-    key: 'setMeal',
+    dataIndex: 'combo',
+    key: 'combo',
   },
   {
     title: '预约时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
+    dataIndex: 'appointmentTime',
+    key: 'appointmentTime',
   },
   {
     title: '是否完成',
@@ -139,7 +141,3 @@ const columns = [
   }
 ];
 </script>
-
-<style scoped>
-/* 添加必要的样式 */
-</style>

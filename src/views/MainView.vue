@@ -14,9 +14,9 @@
             </span>
           </template>
           <a-menu-item key="3" v-if="roleid == 0" @click="toComponentMethod('/MedicalApply')">预约体检</a-menu-item>
-          <a-menu-item key="4" v-if="roleid == 0" @click="toComponentMethod('/MedicalUserInfo')">体检记录</a-menu-item>
+          <a-menu-item key="4" v-if="roleid == 0" @click="toComponentMethod('/MedicalRecords')">体检记录</a-menu-item>
           <a-menu-item key="5" v-if="roleid !=0" @click="toComponentMethod('/MedicalTodayInfo')">今日预约记录</a-menu-item>
-          <a-menu-item key="6" v-if="roleid !=0" @click="toComponentMethod('/MedicalDoctorManage')">管理体检记录</a-menu-item>
+          <a-menu-item key="6" v-if="roleid !=0" @click="toComponentMethod('/MedicalRecords')">管理体检记录</a-menu-item>
         </a-sub-menu>
         <a-menu-item key="7" v-if="roleid == 0">
           <contacts-outlined />
