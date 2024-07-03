@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" :row-selection=access1 :data-source="dataSource" :scroll="{ x: 1500, y: 900 }" bordered
+  <a-table :columns="columns" :data-source="dataSource" :scroll="{ x: 1500, y: 900 }" bordered
     :pagination="pagination" :loading="loading" @change="handleTableChange">
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'operation'">
@@ -62,7 +62,6 @@
       </a-space>
     </template>
   </a-drawer>
-  <a-button @click="deleteSelectedRecords" :disabled="!selectedRowKeys.length" v-if="roleid==2">批量删除</a-button>
 </template>
 
 <script lang="ts" setup>
@@ -74,7 +73,6 @@ import axios from 'axios';
 //const { proxy } = getCurrentInstance();
 
 let roleid = Number(localStorage.getItem('roleid'))
-let access1 = roleid == 2?"rowSelection":null
 let access2 = roleid == 2?false:true
 const columns: TableColumnsType = [
   { title: '用户名', width: 100, dataIndex: 'username', key: 'username', fixed: 'left' },
@@ -257,22 +255,22 @@ const handleTableChange: TableProps['onChange'] = (
   });
 };
 //表格多选框
-const selectedRowKeys = ref<string[]>([]);
-const onSelectChange = (changableRowKeys: string[]) => {
-  console.log('selectedRowKeys changed: ', changableRowKeys);
-  selectedRowKeys.value = changableRowKeys;
-};
+// const selectedRowKeys = ref<string[]>([]);
+// const onSelectChange = (changableRowKeys: string[]) => {
+//   console.log('selectedRowKeys changed: ', changableRowKeys);
+//   selectedRowKeys.value = changableRowKeys;
+// };
 
-const rowSelection = computed(() => ({
-  selectedRowKeys: unref(selectedRowKeys),
-  onChange: onSelectChange,
-  hideDefaultSelections: true,
-  selections: [
-    Table.SELECTION_ALL,
-    Table.SELECTION_INVERT,
-    Table.SELECTION_NONE,
-  ],
-}));
+// const rowSelection = computed(() => ({
+//   selectedRowKeys: unref(selectedRowKeys),
+//   onChange: onSelectChange,
+//   hideDefaultSelections: true,
+//   selections: [
+//     Table.SELECTION_ALL,
+//     Table.SELECTION_INVERT,
+//     Table.SELECTION_NONE,
+//   ],
+// }));
 // //动态级联选择器
 // const options = ref<CascaderProps['options']>([
 //   {
