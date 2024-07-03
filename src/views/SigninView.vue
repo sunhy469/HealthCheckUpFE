@@ -123,7 +123,6 @@ const SigninUserMethod = async () => {
       password: userformState.password,
     })
     if (data.code == 1 ) {
-      console.log(data)
       sessionStorage.setItem("id",data.data.id)
       localStorage.setItem('id', data.data.id)
       localStorage.setItem('roleid', data.data.roleId)

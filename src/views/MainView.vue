@@ -32,6 +32,10 @@
           <a-menu-item key="8" v-if="roleid == 1" @click="toComponentMethod('/usermanage')">患者信息</a-menu-item>
           <a-menu-item key="9" v-if="roleid == 2" @click="toComponentMethod('/usermanage')">管理用户</a-menu-item>
         </a-sub-menu>
+        <a-menu-item key="10" @click="logout">
+          <PoweroffOutlined />
+          <span>退出登录</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -45,7 +49,8 @@
 import {
   HeartOutlined,
   UserOutlined,
-  ContactsOutlined
+  ContactsOutlined,
+  PoweroffOutlined
 } from '@ant-design/icons-vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -57,7 +62,11 @@ const collapsed = ref<boolean>(false);
 const selectedKeys = ref<string[]>(['1']);
 
 let roleid = Number(localStorage.getItem('roleid'))
-
+const logout = () => {
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.reload();
+};
 </script>
 <style scoped>
 .logo {

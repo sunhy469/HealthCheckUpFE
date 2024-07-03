@@ -117,7 +117,6 @@ const checkMobile = async () => {
 //
 const checkCaptcha = async () => {
   try {
-    console.log(123)
     let { data: { code, msg} } = await proxy.$axios.post("user/checkCaptcha", 'captcha=' + registerFormState.captcha);
     if (code == 1 && msg == "INVALID") {
       proxy.$message.warning(`无效的验证码。`);

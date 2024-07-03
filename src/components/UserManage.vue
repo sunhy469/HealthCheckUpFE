@@ -23,7 +23,7 @@
             <a-radio-group v-model:value="form.sex" :disabled=access2 button-style="solid">
               <a-radio-button value="男">男</a-radio-button>
               <a-radio-button value="女">女</a-radio-button>
-              <a-radio-button value="null">不愿透露</a-radio-button>
+              <a-radio-button value="不愿透露">不愿透露</a-radio-button>
             </a-radio-group>
           </a-form-item>
         </a-col>
@@ -71,7 +71,7 @@ import type { TableColumnsType, TableProps,CascaderProps  } from 'ant-design-vue
 import { usePagination } from 'vue-request';
 import { Table } from 'ant-design-vue';
 import axios from 'axios';
-
+//const { proxy } = getCurrentInstance();
 
 let roleid = Number(localStorage.getItem('roleid'))
 let access1 = roleid == 2?"rowSelection":null 
@@ -84,15 +84,14 @@ const columns: TableColumnsType = [
     filters: [
       { text: '男', value: '男' },
       { text: '女', value: '女' },
-      { text: '未知', value: '未知' }
+      { text: '不愿透露', value: '不愿透露' }
     ],
     filterMode: 'tree',
-    filterSearch: true,
     onFilter: (value, record) => record.sex === value,
   },
   { title: '联系方式', dataIndex: 'mobile', key: 'mobile', width: 150 },
   { title: '注册日期', dataIndex: 'createTime', key: 'createTime', width: 150, sorter: true },
-  { title: '上次登录日期', dataIndex: 'lastloginTime', key: 'lastloginTime', width: 200, sorter: true },
+  { title: '上次登录日期', dataIndex: 'lastloginTime', key: 'lastloginTime', width: 150, sorter: true },
   {
     title: '操作',
     key: 'operation',
@@ -182,16 +181,16 @@ type APIResult = {
     mobile: string;
     roleid: string;
     createTime: string;
-    //lastloginTime: string;
+    lastloginTime: string;
   }[];
 };
-//请求数据
-const queryData = async (params: APIParams) => {
-  if(roleid == 1)
-    return axios.get<APIResult>('/user/getpatient', { params });
-  else
-    return axios.get<APIResult>('/user/getall', { params });
-};
+//请求数据（老）
+// const queryData = async (params: APIParams) => {
+//   if(roleid == 1)
+//     return axios.get<APIResult>('/user/getpatient', { params });
+//   else
+//     return axios.get<APIResult>('/user/getall', { params });
+// };
 //返回数据写入
 const {
   data: dataSource,
@@ -200,21 +199,36 @@ const {
   current,
   pageSize,
 } = usePagination(queryData, {
-  formatResult: res => res.data.data.map(item => ({
-    id: item.id,
-    username: item.username,
-    name: item.name,
-    sex: item.sex,
-    mobile: item.mobile,
-    roleid: item.roleid,
-    createTime: item.createTime,
-    //lastloginTime: item.lastloginTime || 'N/A', // 假设如果没有 lastloginTime，就填充为 'N/A'
-  })),
   pagination: {
     currentKey: 'page',
     pageSizeKey: 'results',
   },
 });
+
+async function queryData(params: APIParams) {
+  try {
+    let response;
+    if (roleid == 1) {
+      response = await axios.get<APIResult>('/user/getpatient', { params });
+    } else {
+      response = await axios.get<APIResult>('/user/getall', { params });
+    }
+    return response.data.data.map(item => ({
+      id: item.id,
+      username: item.username,
+      name: item.name,
+      sex: Number(item.sex)===0?'男':Number(item.sex)===1?'女':'不愿透露',
+      mobile: item.mobile,
+      roleid: item.roleid,
+      createTime: item.createTime,
+      lastloginTime: item.lastloginTime || 'N/A', // 假设如果没有 lastloginTime，就填充为 'N/A'
+    }));
+  } catch (error) {
+    proxy.$message.warning(`系统繁忙。请稍后。`);
+    console.log("error:", error);
+    return [];
+  }
+}
 
 //表格筛选变化
 const pagination = computed(() => ({
@@ -253,7 +267,6 @@ const rowSelection = computed(() => ({
     Table.SELECTION_NONE,
   ],
 }));
-
 // //动态级联选择器
 // const options = ref<CascaderProps['options']>([
 //   {
@@ -289,37 +302,4 @@ const rowSelection = computed(() => ({
 // };
 
 // const value = ref<string[]>([]);
-//临时数据
-const data = [
-  {
-    key: '1',
-    username: 'JohnB',
-    name: 'John Brown',
-    sex: '男',
-    lastloginTime: 'New York No. 1 Lake Park',
-    mobile: '13639367401',
-    createTime: '2021-09-01',
-    roleid: '0'
-  },
-  {
-    key: '2',
-    username: 'JimG',
-    name: 'Jim Green',
-    sex: '男',
-    lastloginTime: 'London No. 1 Lake Park',
-    mobile: '17482037594',
-    createTime: '2021-09-01',
-    roleid: '1'
-  },
-  {
-    key: '3',
-    username: 'JoeB',
-    name: 'Joe Black',
-    sex: '女',
-    lastloginTime: 'Sidney No. 1 Lake Park',
-    mobile: '12345678911',
-    createTime: '2021-09-01',
-    roleid: '0'
-  },
-];
 </script>

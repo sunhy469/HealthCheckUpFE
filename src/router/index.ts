@@ -100,7 +100,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const currentUserString = localStorage.getItem('roleid')
-    console.log(currentUserString)
     if (to.name !== 'signin' && to.name !== 'register' && currentUserString == null) {
         next({ path: '/signin' })
     } else {
