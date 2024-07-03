@@ -1,67 +1,67 @@
 <template>
-  <h2 class="forgot-password-title">忘记密码</h2>
-  <a-card style="width: 500px; height: 500px; position: relative; left: 33%">
-    <div class="forgot-password-container">
-      <a-form :model="forgetPasswordFormState" name="forgot_password_form" class="forgot-password-form">
+  <div class="forgot-password-page-container">
+    <a-card style="width: 500px; height: 500px; position: relative; left: 33%">
+      <div class="forgot-password-container">
+        <a-form :model="forgetPasswordFormState" name="forgot_password_form" class="forgot-password-form">
 
-        <a-form-item label="手机号" name="mobile"
-                     :rules="[{ required: true, message: '请输入你的手机号!' }]" @blur='checkMobile'>
-          <a-input v-model:value="forgetPasswordFormState.mobile">
-            <template #prefix>
-              <UserOutlined class="site-form-item-icon"/>
-            </template>
-          </a-input>
-        </a-form-item>
+          <a-form-item label="手机号" name="mobile"
+                       :rules="[{ required: true, message: '请输入你的手机号!' }]" @blur='checkMobile'>
+            <a-input v-model:value="forgetPasswordFormState.mobile">
+              <template #prefix>
+                <UserOutlined class="site-form-item-icon"/>
+              </template>
+            </a-input>
+          </a-form-item>
 
-        <a-form-item label="验证码" name="captcha"
-                     :rules="[{ required: true, message: '请输入你的验证码!' }]" @blur='checkCaptcha'>
-          <a-row gutter="8">
-            <a-col span="15">
-              <a-input v-model:value="forgetPasswordFormState.captcha"/>
-            </a-col>
-            <a-col span="9">
-              <a-button @click="sendCaptcha">发送验证码</a-button>
-            </a-col>
-          </a-row>
-        </a-form-item>
+          <a-form-item label="验证码" name="captcha"
+                       :rules="[{ required: true, message: '请输入你的验证码!' }]" @blur='checkCaptcha'>
+            <a-row gutter="8">
+              <a-col span="15">
+                <a-input v-model:value="forgetPasswordFormState.captcha"/>
+              </a-col>
+              <a-col span="9">
+                <a-button @click="sendCaptcha">发送验证码</a-button>
+              </a-col>
+            </a-row>
+          </a-form-item>
 
-        <a-form-item label="新密码" name="password"
-                     :rules="[{ required: true, message: '请输入你的新密码!' }]">
-          <a-input-password v-model:value="forgetPasswordFormState.password">
-            <template #prefix>
-              <LockOutlined class="site-form-item-icon"/>
-            </template>
-          </a-input-password>
-        </a-form-item>
+          <a-form-item label="新密码" name="password"
+                       :rules="[{ required: true, message: '请输入你的新密码!' }]">
+            <a-input-password v-model:value="forgetPasswordFormState.password">
+              <template #prefix>
+                <LockOutlined class="site-form-item-icon"/>
+              </template>
+            </a-input-password>
+          </a-form-item>
 
-        <a-form-item label="确认密码" name="confirmPassword"
-                     :rules="[{ required: true, message: '请确认你的密码!' }, { validator: validatePassword }]">
-          <a-input-password v-model:value="forgetPasswordFormState.confirmPassword">
-            <template #prefix>
-              <LockOutlined class="site-form-item-icon"/>
-            </template>
-          </a-input-password>
-        </a-form-item>
+          <a-form-item label="确认密码" name="confirmPassword"
+                       :rules="[{ required: true, message: '请确认你的密码!' }, { validator: validatePassword }]">
+            <a-input-password v-model:value="forgetPasswordFormState.confirmPassword">
+              <template #prefix>
+                <LockOutlined class="site-form-item-icon"/>
+              </template>
+            </a-input-password>
+          </a-form-item>
 
-        <a-form-item class="mybutton">
-          <a-button :disabled="isDisabled" type="primary" @click="modifyMethod" html-type="submit" class="forgot-password-form-button">
-            修改
-          </a-button>
-        </a-form-item>
+          <a-form-item class="mybutton">
+            <a-button :disabled="isDisabled" type="primary" @click="modifyMethod" html-type="submit" class="forgot-password-form-button">
+              修改
+            </a-button>
+          </a-form-item>
 
-      </a-form>
-    </div>
-  </a-card>
+        </a-form>
+      </div>
+    </a-card>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, computed, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
-import '../assets/register.css';
+import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
 const { proxy } = getCurrentInstance();
 const router = useRouter();
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
 const modifyMethod = async () => {
   try {
@@ -94,7 +94,7 @@ const checkMobile = async () => {
 
 const checkCaptcha = async () => {
   try {
-    let { data: { code, msg} } = await proxy.$axios.post("user/checkCaptcha", 'captcha=' + forgetPasswordFormState.captcha);
+    let { data: { code, msg } } = await proxy.$axios.post("user/checkCaptcha", 'captcha=' + forgetPasswordFormState.captcha);
     if (code == 1 && msg == "INVALID") {
       proxy.$message.warning(`无效的验证码。`);
     }
@@ -116,14 +116,14 @@ const validatePassword = (rule: any, value: string, callback: any) => {
   }
 };
 
-interface forgetPasswordFormState {
+interface ForgetPasswordFormState {
   mobile: string;
   captcha: string;
   password: string;
   confirmPassword: string;
 }
 
-const forgetPasswordFormState = reactive<forgetPasswordFormState>({
+const forgetPasswordFormState = reactive<ForgetPasswordFormState>({
   mobile: '',
   captcha: '',
   password: '',
@@ -136,13 +136,18 @@ const isDisabled = computed(() => {
 </script>
 
 <style scoped>
-.forgot-password-title {
-  color: #535bf2;
-  text-align: center;
-  margin: 30px 0 40px 0; /* 调整上外边距 */
-  font-size: 36px;
-  font-family: Microsoft Yahei;
+.forgot-password-page-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  background: url("/src/assets/backgroundphoto.jpg") no-repeat;
+  background-size: 120% auto;
+  background-position: center bottom;
 }
+
 
 .forgot-password-container {
   display: flex;
@@ -150,7 +155,7 @@ const isDisabled = computed(() => {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top: 30px; /* 增加顶部填充，将内容向上移动 */
+  padding-top: 30px;
 }
 
 .forgot-password-form {
@@ -161,7 +166,7 @@ const isDisabled = computed(() => {
 
 .options-container {
   display: flex;
-  justify-content: space-between; /* 使选项对称 */
+  justify-content: space-between; /* Make options symmetric */
   align-items: center;
 }
 
@@ -172,4 +177,5 @@ const isDisabled = computed(() => {
 .mybutton {
   text-align: center;
 }
+
 </style>

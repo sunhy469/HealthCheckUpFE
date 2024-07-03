@@ -1,75 +1,76 @@
 <template>
-  <h2 class="register-title">注册页面</h2>
-  <a-card style="width: 500px; height: 500px; position: relative; left: 33%">
-    <div class="register-container">
-      <a-form :model="registerFormState" name="register_form" class="register-form">
+  <div class="register-page-container">
+    <a-card class="register-card">
+      <div class="register-container">
+        <a-form :model="registerFormState" name="register_form" class="register-form">
 
-        <a-form-item label="账号" name="username"
-                     :rules="[{ required: true, message: '请输入你的账号!' }]">
-          <a-input v-model:value="registerFormState.username">
-            <template #prefix>
-              <UserOutlined class="site-form-item-icon"/>
-            </template>
-          </a-input>
-        </a-form-item>
+          <a-form-item label="账号" name="username"
+                       :rules="[{ required: true, message: '请输入你的账号!' }]">
+            <a-input v-model:value="registerFormState.username">
+              <template #prefix>
+                <UserOutlined class="site-form-item-icon"/>
+              </template>
+            </a-input>
+          </a-form-item>
 
-        <a-form-item label="真名" name="name"
-                     :rules="[{ required: true, message: '请输入你的真名!' }]">
-          <a-input v-model:value="registerFormState.name">
-            <template #prefix>
-              <UserOutlined class="site-form-item-icon"/>
-            </template>
-          </a-input>
-        </a-form-item>
+          <a-form-item label="真名" name="name"
+                       :rules="[{ required: true, message: '请输入你的真名!' }]">
+            <a-input v-model:value="registerFormState.name">
+              <template #prefix>
+                <UserOutlined class="site-form-item-icon"/>
+              </template>
+            </a-input>
+          </a-form-item>
 
-        <a-form-item label="手机号" name="mobile"
-                     :rules="[{ required: true, message: '请输入你的手机号!' }]" @blur='checkMobile'>
-          <a-input v-model:value="registerFormState.mobile">
-            <template #prefix>
-              <UserOutlined class="site-form-item-icon"/>
-            </template>
-          </a-input>
-        </a-form-item>
+          <a-form-item label="手机号" name="mobile"
+                       :rules="[{ required: true, message: '请输入你的手机号!' }]" @blur='checkMobile'>
+            <a-input v-model:value="registerFormState.mobile">
+              <template #prefix>
+                <UserOutlined class="site-form-item-icon"/>
+              </template>
+            </a-input>
+          </a-form-item>
 
-        <a-form-item label="验证码" name="captcha"
-                     :rules="[{ required: true, message: '请输入你的验证码!' }]" @blur='checkCaptcha'>
-          <a-row gutter="8">
-            <a-col span="15">
-              <a-input v-model:value="registerFormState.captcha"/>
-            </a-col>
-            <a-col span="9">
-              <a-button @click="sendCaptcha">发送验证码</a-button>
-            </a-col>
-          </a-row>
-        </a-form-item>
+          <a-form-item label="验证码" name="captcha"
+                       :rules="[{ required: true, message: '请输入你的验证码!' }]" @blur='checkCaptcha'>
+            <a-row gutter="8">
+              <a-col span="15">
+                <a-input v-model:value="registerFormState.captcha"/>
+              </a-col>
+              <a-col span="9">
+                <a-button @click="sendCaptcha">发送验证码</a-button>
+              </a-col>
+            </a-row>
+          </a-form-item>
 
-        <a-form-item label="密码" name="password"
-                     :rules="[{ required: true, message: '请输入你的密码!' }]">
-          <a-input-password v-model:value="registerFormState.password">
-            <template #prefix>
-              <LockOutlined class="site-form-item-icon"/>
-            </template>
-          </a-input-password>
-        </a-form-item>
+          <a-form-item label="密码" name="password"
+                       :rules="[{ required: true, message: '请输入你的密码!' }]">
+            <a-input-password v-model:value="registerFormState.password">
+              <template #prefix>
+                <LockOutlined class="site-form-item-icon"/>
+              </template>
+            </a-input-password>
+          </a-form-item>
 
-        <a-form-item label="确认密码" name="confirmPassword"
-                     :rules="[{ required: true, message: '请确认你的密码!' }, { validator: validatePassword }]">
-          <a-input-password v-model:value="registerFormState.confirmPassword">
-            <template #prefix>
-              <LockOutlined class="site-form-item-icon"/>
-            </template>
-          </a-input-password>
-        </a-form-item>
+          <a-form-item label="确认密码" name="confirmPassword"
+                       :rules="[{ required: true, message: '请确认你的密码!' }, { validator: validatePassword }]">
+            <a-input-password v-model:value="registerFormState.confirmPassword">
+              <template #prefix>
+                <LockOutlined class="site-form-item-icon"/>
+              </template>
+            </a-input-password>
+          </a-form-item>
 
-        <a-form-item class="mybutton">
-          <a-button :disabled="isDisabled" type="primary" @click="registerMethod" html-type="submit" class="register-form-button">
-            注册
-          </a-button>
-        </a-form-item>
+          <a-form-item class="mybutton">
+            <a-button :disabled="isDisabled" type="primary" @click="registerMethod" html-type="submit" class="register-form-button">
+              注册
+            </a-button>
+          </a-form-item>
 
-      </a-form>
-    </div>
-  </a-card>
+        </a-form>
+      </div>
+    </a-card>
+  </div>
 </template>
 
 <script lang="ts" setup>

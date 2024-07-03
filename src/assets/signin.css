@@ -7,8 +7,8 @@
     justify-content: center;
     min-height: 100vh;
     text-align: center;
-    background-color: #f0f2f5; /* Fallback color */
-    background: url("/src/assets/login-background.jpg") no-repeat;
+    background-color: #f0f2f5;
+    background: url("/src/assets/backgroundphoto.jpg") no-repeat;
     background-size: 100% 100%;
 }
 

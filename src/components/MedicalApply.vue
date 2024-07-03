@@ -60,7 +60,6 @@ const options: CascaderProps['options'] = [
             label: '肾病检查',
             children: [
               { value: '小菲医生', label: '小菲医生' },
-              { value: '小杜医生', label: '小杜医生' },
             ],
           },
           {
@@ -68,7 +67,6 @@ const options: CascaderProps['options'] = [
             label: '肝病检查',
             children: [
               { value: '小萧医生', label: '小萧医生' },
-              { value: '小范医生', label: '小范医生' },
             ],
           },
         ],
@@ -81,7 +79,7 @@ const options: CascaderProps['options'] = [
             value: '视网膜检查',
             label: '视网膜检查',
             children: [
-              { value: '小萨医生', label: '小萨医生' },
+              { value: '小肖医生', label: '小肖医生' },
             ],
           },
           {
@@ -109,82 +107,13 @@ const options: CascaderProps['options'] = [
             label: '鼻外伤治疗',
             children: [
               { value: '小白医生', label: '小白医生' },
-              { value: '小杰医生', label: '小杰医生' },
             ],
           },
           {
             value: '囊肿检查',
             label: '囊肿检查',
             children: [
-              { value: '小美医生', label: '小美医生' },
               { value: '小敏医生', label: '小敏医生' },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: '武汉医院',
-    label: '武汉医院',
-    children: [
-      {
-        value: '内科',
-        label: '内科',
-        children: [
-          {
-            value: '肾病检查',
-            label: '肾病检查',
-            children: [
-              { value: '小晓医生', label: '小晓医生' },
-            ],
-          },
-          {
-            value: '肝病检查',
-            label: '肝病检查',
-            children: [
-              { value: '小晓医生', label: '小晓医生' },
-            ],
-          },
-        ],
-      },
-      {
-        value: '眼科',
-        label: '眼科',
-        children: [
-          {
-            value: '视网膜检查',
-            label: '视网膜检查',
-            children: [
-              { value: '小柯医生', label: '小柯医生' },
-            ],
-          },
-          {
-            value: '结膜炎治疗',
-            label: '结膜炎治疗',
-            children: [
-              { value: '小南医生', label: '小南医生' },
-            ],
-          },
-        ],
-      },
-      {
-        value: '口腔科',
-        label: '口腔科',
-        children: [
-          {
-            value: '牙髓炎治疗',
-            label: '牙髓炎治疗',
-            children: [
-              { value: '小宁医生', label: '小宁医生' },
-            ],
-          },
-          {
-            value: '牙结石手术',
-            label: '牙结石手术',
-            children: [
-              { value: '小陈医生', label: '小陈医生' },
-              { value: '小肖医生', label: '小肖医生' },
             ],
           },
         ],
@@ -220,11 +149,10 @@ const options: CascaderProps['options'] = [
         label: '内科',
         children: [
           {
-            value: '肝病检查',
-            label: '肝病检查',
+            value: '气管炎治疗',
+            label: '气管炎治疗',
             children: [
               { value: '小凡医生', label: '小凡医生' },
-              { value: '小艺医生', label: '小艺医生' },
             ],
           },
         ],
@@ -234,22 +162,22 @@ const options: CascaderProps['options'] = [
         label: '眼科',
         children: [
           {
-            value: '视网膜检查',
-            label: '视网膜检查',
+            value: '睑板腺检查',
+            label: '睑板腺检查',
+            children: [
+              { value: '小艺医生', label: '小艺医生' },
+            ],
+          },
+          {
+            value: '眼睑腺炎检查',
+            label: '眼睑腺炎检查',
             children: [
               { value: '小唐医生', label: '小唐医生' },
             ],
           },
           {
-            value: '结膜炎治疗',
-            label: '结膜炎治疗',
-            children: [
-              { value: '小唐医生', label: '小唐医生' },
-            ],
-          },
-          {
-            value: '老花眼检查',
-            label: '老花眼检查',
+            value: '青光眼检查',
+            label: '青光眼检查',
             children: [
               { value: '小连医生', label: '小连医生' },
             ],

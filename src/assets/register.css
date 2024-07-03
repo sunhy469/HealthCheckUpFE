@@ -1,17 +1,21 @@
-.register-title {
-    color: #535bf2;
-    text-align: center;
-    margin: 100px 0 60px 0;
-    font-size: 36px;
-    font-family: Microsoft Yahei;
+/* register.css */
+.register-page-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f2f5; /* Fallback color */
+    background: url("/src/assets/backgroundphoto.jpg") no-repeat;
+    background-size: cover;
 }
 
 .register-card {
     width: 500px;
-    height: 400px; /* Adjust height to match login card */
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    height: 500px; /* Adjust height if necessary */
+    background: rgba(255, 255, 255, 0.85); /* Background with 85% opacity */
+    border-radius: 8px; /* Optional: Add rounded corners for aesthetics */
 }
 
 .register-container {
