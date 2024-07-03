@@ -3,7 +3,7 @@
       title="当日订单"
       hoverable
       headStyle="background-color: #91caff"
-      style="min-height: 350px "
+      style="min-height: 350px"
   >
     <a-table :columns="columns" :data-source="orderformState" bordered :scroll="{ x: 'max-content' }">
       <template #headerCell="{ column }">
@@ -17,7 +17,7 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'name'">
-          <a>{{ record.username }}</a>
+          <a>{{ record.name }}</a>
         </template>
         <template v-else-if="column.key === 'dept_name'">
           <span>{{ record.dept_name }}</span>
@@ -29,7 +29,15 @@
           <span>{{ record.appointmentTime }}</span>
         </template>
         <template v-else-if="column.key === 'finish'">
-          <a-button @click="orderFinish(record)">完成</a-button>
+          <a-button
+              v-if="record.isFinished === 0"
+              type="primary"
+              size="small"
+              @click="orderFinish(record)"
+          >
+            待完成
+          </a-button>
+          <span v-else>已完成</span>
         </template>
       </template>
     </a-table>
@@ -51,6 +59,7 @@ interface OrderFormState {
   dept_name: string;
   appointmentTime: string;
   doctor_name: string;
+  isFinished: number;
 }
 
 const orderformState = ref<OrderFormState[]>([]);
@@ -66,7 +75,7 @@ const formattedDate = `${year}-${month}-${day}`;
 
 const obtainDataMethodFororderList = async () => {
   try {
-    let { data } = await proxy.$axios.post("main/recordtoday", { currentid ,roleid });
+    let { data } = await proxy.$axios.post("main/recordtoday", { currentid, roleid });
     if (data.code == 1) {
       orderformState.value = data.list.map((item: any) => ({
         id: item.id,
@@ -74,8 +83,9 @@ const obtainDataMethodFororderList = async () => {
         hospital_name: item.hospital_name,
         combo: item.combo,
         dept_name: item.dept_name,
-        doctor_name:item.doctor_name,
+        doctor_name: item.doctor_name,
         appointmentTime: item.appointmentTime,
+        isFinished: item.isFinished,
       }));
     } else {
       proxy.$message.warning(`读取订单列表数据失败。`);
@@ -94,7 +104,11 @@ const orderFinish = (record: OrderFormState) => {
       try {
         let { data } = await proxy.$axios.post("main/finishrecord", { id: record.id });
         if (data.code == 1) {
-          orderformState.value = orderformState.value.filter(item => item.id !== record.id);
+          // 更新订单的完成状态
+          const order = orderformState.value.find(item => item.id === record.id);
+          if (order) {
+            order.isFinished = 1;
+          }
           message.success('订单完成');
         } else {
           message.error('完成订单失败');
@@ -140,4 +154,5 @@ const columns = [
     key: 'finish',
   }
 ];
+
 </script>
