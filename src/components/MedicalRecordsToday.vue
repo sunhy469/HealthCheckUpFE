@@ -104,10 +104,10 @@ const obtainDataMethodFororderList = async () => {
 const orderFinish = (record: OrderFormState) => {
   Modal.confirm({
     title: '确认完成',
-    content: `您确认完成该订单吗？（${record.name}）`,
+    content: `您确认完成该订单吗？`,
     onOk: async () => {
       try {
-        let { data } = await proxy.$axios.post("main/finishrecord", { id: record.id });
+        let { data } = await proxy.$axios.post("home/finishrecord", { id: record.id });
         if (data.code == 1) {
           // 更新订单的完成状态
           const order = orderformState.value.find(item => item.id === record.id);
