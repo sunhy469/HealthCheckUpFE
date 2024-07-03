@@ -1,6 +1,5 @@
 <template>
   <div class="login-page-container">
-    <h2 class="login-title">登陆页面</h2>
     <a-card class="login-card">
       <a-tabs centered class="mytabs" v-model:activeKey="activeKey">
         <a-tab-pane key="1" tab="用户名登入">

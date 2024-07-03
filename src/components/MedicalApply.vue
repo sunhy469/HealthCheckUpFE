@@ -48,55 +48,6 @@ const router = useRouter();
 
 const options: CascaderProps['options'] = [
   {
-    value: '杭州医院',
-    label: '杭州医院',
-    children: [
-      {
-        value: '外科',
-        label: '外科',
-        children: [
-          {
-            value: '颈部疾病治疗',
-            label: '颈部疾病治疗',
-            children: [
-              { value: '小明医生', label: '小明医生' },
-              { value: '小王医生', label: '小王医生' },
-            ],
-          },
-          {
-            value: '腹壁疾病治疗',
-            label: '腹壁疾病治疗',
-            children: [
-              { value: '小孙医生', label: '小孙医生' },
-              { value: '小强医生', label: '小强医生' },
-            ],
-          },
-        ],
-      },
-      {
-        value: '内科',
-        label: '内科',
-        children: [
-          {
-            value: '肾病检查',
-            label: '肾病检查',
-            children: [
-              { value: '小马医生', label: '小马医生' },
-            ],
-          },
-          {
-            value: '肝病检查',
-            label: '肝病检查',
-            children: [
-              { value: '小李医生', label: '小李医生' },
-              { value: '小丽医生', label: '小丽医生' },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
     value: '上海医院',
     label: '上海医院',
     children: [
@@ -234,59 +185,6 @@ const options: CascaderProps['options'] = [
             children: [
               { value: '小陈医生', label: '小陈医生' },
               { value: '小肖医生', label: '小肖医生' },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: '厦门医院',
-    label: '厦门医院',
-    children: [
-      {
-        value: '外科',
-        label: '外科',
-        children: [
-          {
-            value: '颈部疾病治疗',
-            label: '颈部疾病治疗',
-            children: [
-              { value: '小梅医生', label: '小梅医生' },
-            ],
-          },
-          {
-            value: '腹壁疾病治疗',
-            label: '腹壁疾病治疗',
-            children: [
-              { value: '小吴医生', label: '小吴医生' },
-            ],
-          },
-          {
-            value: '乳腺疾病治疗',
-            label: '乳腺疾病治疗',
-            children: [
-              { value: '小武医生', label: '小武医生' },
-            ],
-          },
-        ],
-      },
-      {
-        value: '口腔科',
-        label: '口腔科',
-        children: [
-          {
-            value: '牙髓炎治疗',
-            label: '牙髓炎治疗',
-            children: [
-              { value: '小贝医生', label: '小贝医生' },
-            ],
-          },
-          {
-            value: '牙结石手术',
-            label: '牙结石手术',
-            children: [
-              { value: '小贝医生', label: '小贝医生' },
             ],
           },
         ],

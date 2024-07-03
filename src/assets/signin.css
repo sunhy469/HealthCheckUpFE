@@ -1,24 +1,23 @@
+/* sign-in.css */
 .login-page-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 50vh;
+    min-height: 100vh;
     text-align: center;
-    padding-top: 30px; /* 增加顶部填充，将内容向上移动 */
-}
-
-.login-title {
-    color: #535bf2;
-    text-align: center;
-    margin: 30px 0 40px 0; /* 调整上外边距 */
-    font-size: 36px;
-    font-family: Microsoft Yahei;
+    background-color: #f0f2f5; /* Fallback color */
+    background: url("/src/assets/login-background.jpg") no-repeat;
+    background-size: 100% 100%;
 }
 
 .login-card {
     width: 500px;
     height: 400px;
+    position: relative; /* Ensure card is positioned relative to container */
+    background: rgba(255, 255, 255, 0.85); /* Background with 80% opacity */
+    border-radius: 8px; /* Optional: Add rounded corners for aesthetics */
 }
 
 .login-form {
@@ -29,12 +28,12 @@
 
 .options-container {
     display: flex;
-    justify-content: space-between; /* 使选项对称 */
+    justify-content: space-between;
     align-items: center;
 }
 
 .login-form-forgot {
-    margin-left: auto; /* 确保靠右 */
+    margin-left: auto;
 }
 
 .login-form-button {
