@@ -87,7 +87,7 @@ const goToRegister = () => {
   router.push({ path: '/register' });
 };
 
-const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance()as any;
 
 const forgetPassword = () => {
   router.push({ path: '/ForgetPassword' });
@@ -189,6 +189,7 @@ const onFinishFailed = (errorInfo: any) => {
 
 const sendcaptcha = async () => {
   let { data } = await proxy.$axios.post("user/captcha", phoneformState);
+  console.log(data);
   proxy.$message.success(`发送验证码成功！`);
 };
 

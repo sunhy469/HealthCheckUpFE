@@ -78,7 +78,7 @@ import { reactive, computed, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import '../assets/register.css';
 
-const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
@@ -128,10 +128,11 @@ const checkCaptcha = async () => {
 
 const sendCaptcha = async () => {
   let { data } = await proxy.$axios.post("user/captcha", registerFormState);
+  console.log(data);
   proxy.$message.success(`发送验证码成功！`);
 };
 
-const validatePassword = (rule: any, value: string, callback: any) => {
+const validatePassword = (value: string, callback: any) => {
   if (value !== registerFormState.password) {
     callback(new Error('两次输入的密码不一致！'));
   } else {

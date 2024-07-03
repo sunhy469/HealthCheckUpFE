@@ -46,10 +46,7 @@
 
 <script setup lang="ts">
 import { ref, getCurrentInstance, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import { message, Modal } from 'ant-design-vue';
-
-const router = useRouter();
 let access1 = true;
 interface OrderFormState {
   id: number;
@@ -64,14 +61,9 @@ interface OrderFormState {
 
 const orderformState = ref<OrderFormState[]>([]);
 
-const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance() as any;
 const currentid = localStorage.getItem("id");
 const roleid = localStorage.getItem("roleid");
-const today = new Date();
-const year = today.getFullYear();
-const month = String(today.getMonth() + 1).padStart(2, '0');
-const day = String(today.getDate()).padStart(2, '0');
-const formattedDate = `${year}-${month}-${day}`;
 
 const obtainDataMethodFororderList = async () => {
   try {

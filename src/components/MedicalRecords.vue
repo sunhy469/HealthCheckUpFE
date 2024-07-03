@@ -19,7 +19,7 @@
               :placeholder="`Search ${column.dataIndex}`"
               :value="selectedKeys[0]"
               style="width: 188px; margin-bottom: 8px; display: block"
-              @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
+              @change="(e: any) => setSelectedKeys(e.target.value ? [e.target.value] : [])"
               @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
           />
           <a-button
@@ -77,7 +77,7 @@ import { SearchOutlined } from '@ant-design/icons-vue';
 import { getCurrentInstance, onMounted, reactive, ref } from 'vue';
 import { message, Modal } from 'ant-design-vue';
 
-const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance() as any;
 const currentid = localStorage.getItem('id');
 const roleid = localStorage.getItem('roleid');
 let access1=true;
@@ -166,8 +166,8 @@ const columns = (roleid==='1'||roleid==='2')?[
       dataIndex: 'aname',
       key: 'aname',
       customFilterDropdown: true,
-      onFilter: (value, record) => record.name.toString().toLowerCase().includes(value.toLowerCase()),
-      onFilterDropdownOpenChange: visible => {
+      onFilter: (value: string, record: { name: { toString: () => string; }; }) => record.name.toString().toLowerCase().includes(value.toLowerCase()),
+      onFilterDropdownOpenChange: (visible: any) => {
         if (visible) {
           setTimeout(() => {
             searchInput.value.focus();
@@ -219,96 +219,16 @@ const columns = (roleid==='1'||roleid==='2')?[
   }
 ];
 
-const handleSearch = (selectedKeys, confirm, dataIndex) => {
+const handleSearch = (selectedKeys: string[], confirm: () => void, dataIndex: string) => {
   confirm();
   state.searchText = selectedKeys[0];
   state.searchedColumn = dataIndex;
 };
 
-const handleReset = clearFilters => {
+const handleReset = (clearFilters: (arg0: { confirm: boolean; }) => void) => {
   clearFilters({ confirm: true });
   state.searchText = '';
 };
-
-const data = [
-  {
-    aname: '王小明',
-    dept_name: '常规体检',
-    combo: '基础套餐',
-    createTime: '2024-07-01 09:00:00',
-    isFinished: 0
-  },
-  {
-    aname: '王小明',
-    dept_name: '入职体检',
-    combo: '高级套餐',
-    createTime: '2024-07-01 10:00:00',
-    isFinished: 0
-  },
-  {
-    aname: '张三',
-    dept_name: '常规体检',
-    combo: '基础套餐',
-    createTime: '2024-07-02 08:30:00',
-    isFinished: 0
-  },
-  {
-    aname: '李四',
-    dept_name: '入职体检',
-    combo: '高级套餐',
-    createTime: '2024-07-02 11:00:00',
-    isFinished: 0
-  },
-  {
-    aname: '王五',
-    dept_name: '常规体检',
-    combo: '基础套餐',
-    createTime: '2024-07-03 09:30:00',
-    isFinished: 0
-  },
-  {
-    aname: '赵六',
-    dept_name: '常规体检',
-    combo: '高级套餐',
-    createTime: '2024-07-03 10:30:00',
-    isFinished: 0
-  },
-  {
-    aname: '孙七',
-    dept_name: '入职体检',
-    combo: '基础套餐',
-    createTime: '2024-07-04 08:00:00',
-    isFinished: 0
-  },
-  {
-    aname: '周八',
-    dept_name: '入职体检',
-    combo: '高级套餐',
-    createTime: '2024-07-04 10:45:00',
-    isFinished: 1
-  },
-  {
-    aname: '吴九',
-    dept_name: '常规体检',
-    combo: '基础套餐',
-    createTime: '2024-07-05 09:15:00',
-    isFinished: 1
-  },
-  {
-    aname: '郑十',
-    dept_name: '入职体检',
-    combo: '高级套餐',
-    createTime: '2024-07-05 11:30:00',
-    isFinished: 0
-  },
-  {
-    aname: '木十一',
-    dept_name: '入职体检',
-    combo: '高级套餐',
-    createTime: '2024-07-06 11:30:00',
-    isFinished: 1
-  }
-];
 
 </script>
 

@@ -55,8 +55,8 @@
               <a-radio-button value="2">管理员</a-radio-button>
             </a-radio-group>
           </a-form-item>
-        <!-- </a-col>
-        <a-col :span="12">
+         </a-col>
+        <!--<a-col :span="12">
           <a-form-item label="所在科室" name="deptid" v-if="form.roleId=='1'">
             <a-cascader v-model:value="value" :options="options" :load-data="loadData" placeholder="Please select" change-on-select/>
           </a-form-item>
@@ -82,12 +82,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, unref } from 'vue';
-import type { TableColumnsType, TableProps, CascaderProps } from 'ant-design-vue';
+import { ref, computed, getCurrentInstance} from 'vue';
+import type { TableColumnsType, TablePaginationConfig, TableProps } from 'ant-design-vue';
 import { usePagination } from 'vue-request';
-import { Table } from 'ant-design-vue';
 import axios from 'axios';
-//const { proxy } = getCurrentInstance();
+import { FilterValue } from 'ant-design-vue/es/table/interface';
+const { proxy } = getCurrentInstance() as any;
 
 let roleid = Number(localStorage.getItem('roleid'))
 let access2 = roleid == 2 ? false : true
@@ -96,11 +96,11 @@ const columns: TableColumnsType = [
   { title: '真实姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
   {
     title: '性别', width: 100, dataIndex: 'sex', key: 'sex',
-    render: (text) => {
-      if (text === '0') return '男';
-      if (text === '1') return '女';
-      return '不愿透露';
-    },
+    // render: (text) => {
+    //   if (text === '0') return '男';
+    //   if (text === '1') return '女';
+    //   return '不愿透露';
+    // },
     filters: [
       { text: '男', value: '0' },
       { text: '女', value: '1' },
@@ -258,16 +258,14 @@ const pagination = computed(() => ({
   pageSize: pageSize.value,
 }));
 
-const handleTableChange: TableProps['onChange'] = (
-    pag: { pageSize: number; current: number },
-    filters: any,
-    sorter: any,
+const handleTableChange: TableProps<any>['onChange'] = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>,
 ) => {
+  const { pageSize = 10, current = 1 } = pagination;
   run({
-    results: pag.pageSize,
-    page: pag?.current,
-    sortField: sorter.field,
-    sortOrder: sorter.order,
+    results: pageSize,
+    page: current,
     ...filters,
   });
 };

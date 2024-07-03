@@ -64,7 +64,7 @@ const edit = async () => {
 onMounted(() => {
   obtainDataMethodForUserInfo();
 });
-const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance() as any;
 const obtainDataMethodForUserInfo = async () => {
   try {
     let { data } = await proxy.$axios.post("user/getinfo", {id},{headers: {token: localStorage.getItem('token')}});

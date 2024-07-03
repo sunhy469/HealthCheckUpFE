@@ -41,10 +41,8 @@
 import dayjs, {Dayjs} from 'dayjs';
 import {computed, getCurrentInstance, ref} from 'vue';
 import type {CascaderProps} from 'ant-design-vue';
-import {useRouter} from "vue-router";
 
-const { proxy } = getCurrentInstance();
-const router = useRouter();
+const { proxy } = getCurrentInstance()as any;
 
 const options: CascaderProps['options'] = [
   {
