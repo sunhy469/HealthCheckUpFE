@@ -21,9 +21,9 @@
         <a-col :span="12">
           <a-form-item label="性别" name="sex" >
             <a-radio-group v-model:value="form.sex" :disabled=access2 button-style="solid">
-              <a-radio-button value="男">男</a-radio-button>
-              <a-radio-button value="女">女</a-radio-button>
-              <a-radio-button value="不愿透露">不愿透露</a-radio-button>
+              <a-radio-button value="0">男</a-radio-button>
+              <a-radio-button value="1">女</a-radio-button>
+              <a-radio-button value="2">不愿透露</a-radio-button>
             </a-radio-group>
           </a-form-item>
         </a-col>
@@ -41,15 +41,15 @@
         </a-col>
         <a-col :span="12">
           <a-form-item label="用户类型" name="roleid" v-if="roleid==2">
-            <a-radio-group v-model:value="form.roleid" button-style="solid">
-              <a-radio-button value='0'>普通用户</a-radio-button>
-              <a-radio-button value='1'>医生</a-radio-button>
-              <a-radio-button value='2'>管理员</a-radio-button>
+            <a-radio-group v-model:value="form.roleId" button-style="solid" >
+              <a-radio-button value="0">普通用户</a-radio-button>
+              <a-radio-button value="1">医生</a-radio-button>
+              <a-radio-button value="2">管理员</a-radio-button>
             </a-radio-group>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="所在科室" name="deptid" v-if="form.roleid=='1'">
+          <a-form-item label="所在科室" name="deptid" v-if="form.roleId=='1'">
             <a-cascader v-model:value="value":options="options":load-data="loadData"placeholder="Please select" change-on-select/>
           </a-form-item>
         </a-col>
@@ -74,24 +74,29 @@ import axios from 'axios';
 //const { proxy } = getCurrentInstance();
 
 let roleid = Number(localStorage.getItem('roleid'))
-let access1 = roleid == 2?"rowSelection":null 
+let access1 = roleid == 2?"rowSelection":null
 let access2 = roleid == 2?false:true
 const columns: TableColumnsType = [
   { title: '用户名', width: 100, dataIndex: 'username', key: 'username', fixed: 'left' },
   { title: '真实姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
   {
     title: '性别', width: 100, dataIndex: 'sex', key: 'sex',
+    render: (text) => {
+      if (text === '0') return '男';
+      if (text === '1') return '女';
+      return '不愿透露';
+    },
     filters: [
-      { text: '男', value: '男' },
-      { text: '女', value: '女' },
-      { text: '不愿透露', value: '不愿透露' }
+      { text: '男', value: '0' },
+      { text: '女', value: '1' },
+      { text: '不愿透露', value: '2' }
     ],
     filterMode: 'tree',
     onFilter: (value, record) => record.sex === value,
   },
   { title: '联系方式', dataIndex: 'mobile', key: 'mobile', width: 150 },
   { title: '注册日期', dataIndex: 'createTime', key: 'createTime', width: 150, sorter: true },
-  { title: '上次登录日期', dataIndex: 'lastloginTime', key: 'lastloginTime', width: 150, sorter: true },
+  { title: '上次登录日期', dataIndex: 'lastLoginTime', key: 'lastLoginTime', width: 150, sorter: true },
   {
     title: '操作',
     key: 'operation',
@@ -105,15 +110,16 @@ const open = ref<boolean>(false);//抽屉状态
 //提交表单
 const form = ref({
   name: '',
-  sex: '',
+  sex: 0,
   mobile: '',
-  password: null,
-  roleid: ''
+  password: '',
+  roleId: ''
 });
 
 //显示抽屉
 const showDrawer = (record: any) => {
   currentRecord.value = record;
+  console.log(record)
   form.value = { ...record };
   open.value = true;
 };
@@ -179,9 +185,9 @@ type APIResult = {
     name: string;
     sex: string;
     mobile: string;
-    roleid: string;
+    roleId: string;
     createTime: string;
-    lastloginTime: string;
+    lastLoginTime: string;
   }[];
 };
 //请求数据（老）
@@ -217,11 +223,11 @@ async function queryData(params: APIParams) {
       id: item.id,
       username: item.username,
       name: item.name,
-      sex: Number(item.sex)===0?'男':Number(item.sex)===1?'女':'不愿透露',
+      sex: item.sex,
       mobile: item.mobile,
-      roleid: item.roleid,
+      roleId: item.roleId,
       createTime: item.createTime,
-      lastloginTime: item.lastloginTime || 'N/A', // 假设如果没有 lastloginTime，就填充为 'N/A'
+      lastLoginTime: item.lastLoginTime || 'N/A', // 假设如果没有 lastLoginTime，就填充为 'N/A'
     }));
   } catch (error) {
     proxy.$message.warning(`系统繁忙。请稍后。`);

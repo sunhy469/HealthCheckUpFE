@@ -395,19 +395,18 @@ const range = (start: number, end: number) => {
 };
 
 const onSubmit = async () => {
-  console.log(123)
   try {
-    const [institution = '', type = '', setMeal = '', doctor = ''] = cascaderValue.value;
-    console.log(cascaderValue.value)
-    console.log(appointmentTime.value)
+    const [institution, type , setMeal, doctor] = cascaderValue.value;
     const requestData = {
+      userId : Number(localStorage.getItem('id')),
       institution,
       type,
       setMeal,
       doctor,
       appointmentTime: appointmentTime.value ? appointmentTime.value.format('YYYY-MM-DD HH:mm:ss') : null,
     };
-    const { data } = await proxy.$axios.post("/order/Application", requestData);
+    console.log(requestData)
+    const { data } = await proxy.$axios.post("/home/apply", requestData);
     if (data.code === 1) {
       proxy.$message.success('预约成功！');
     } else {
