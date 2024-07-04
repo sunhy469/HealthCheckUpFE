@@ -133,6 +133,7 @@ const sendCaptcha = async () => {
 };
 
 const validatePassword = ( rule: any, value: string, callback: any) => {
+  console.log(rule)
   if (value !== registerFormState.password) {
     callback(new Error('两次输入的密码不一致！'));
   } else {

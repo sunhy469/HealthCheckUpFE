@@ -28,9 +28,9 @@
           <a-col :span="12">
             <a-form-item label="性别" name="sex" >
               <a-radio-group v-model:value="form.sex" :disabled=access2 button-style="solid">
-                <a-radio-button value="0">男</a-radio-button>
-                <a-radio-button value="1">女</a-radio-button>
-                <a-radio-button value="2">不愿透露</a-radio-button>
+                <a-radio-button value="男">男</a-radio-button>
+                <a-radio-button value="女">女</a-radio-button>
+                <a-radio-button value="不愿透露">不愿透露</a-radio-button>
               </a-radio-group>
             </a-form-item>
           </a-col>
@@ -82,8 +82,7 @@
   </template>
 
   <script lang="ts" setup>
-  import { ref, getCurrentInstance, onMounted, reactive } from 'vue';
-  import { message, Modal } from 'ant-design-vue';
+  import { ref, getCurrentInstance, onMounted} from 'vue';
   import type { TableColumnsType } from 'ant-design-vue';
   import axios from 'axios';
 
@@ -117,7 +116,7 @@
   //提交表单
   const form = ref({
     name: '',
-    sex: 0,
+    sex: '',
     mobile: '',
     password: null,
     roleId: ''
@@ -148,7 +147,8 @@
       try {
         const { data } = await axios.post("user/delete", { id: recordToDelete.value }, { headers: { token: localStorage.getItem('token') } });
         if (data.code === 1) {
-          window.location.reload();
+          onClose();
+          fetchData();
         } else {
           proxy.$message.warning(`删除失败。`);
         }
@@ -168,9 +168,11 @@
   //编辑信息
   const edit = async () => {
     try {
+      form.value.sex==='男'?form.value.sex='0':form.value.sex==='女'?form.value.sex='1':form.value.sex='2';
       const { data } = await axios.post("user/editinfo", form.value, { headers: { token: localStorage.getItem('token') } });
       if (data.code === 1) {
-        window.location.reload();
+        onClose();
+        fetchData();
       } else {
         proxy.$message.warning(`读取用户列表数据失败。`);
       }
@@ -215,6 +217,7 @@
   };
 
   const handleTableChange = (pagination: any, filters: any, sorter: any) => {
+    console.log(pagination, filters, sorter);
     fetchData();
   };
 

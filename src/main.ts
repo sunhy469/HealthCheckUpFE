@@ -5,7 +5,7 @@ import Antd from 'ant-design-vue';
 import router from './router';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3000/api1'; // 设置默认基础URL
+axios.defaults.baseURL = 'https://be.smozx.eu.org/sunny'; // 设置默认基础URL
 const app = createApp(App);
 app.use(router);
 app.use(Antd);

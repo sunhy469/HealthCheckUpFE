@@ -4,7 +4,6 @@ import type { Rule } from 'ant-design-vue/es/form';
 
 let id = localStorage.getItem('id')?.toString()
 let access1=true;
-console.log(id)
 interface FormState {
   username: string;
   name: string;
@@ -52,7 +51,8 @@ const edit = async () => {
   try {
     let { data } = await proxy.$axios.post("user/editinfo", form,{headers: {token: localStorage.getItem('token')}});
     if (data.code == 1) {
-      window.location.reload();
+      onClose();
+      obtainDataMethodForUserInfo();
     } else {
       proxy.$message.warning(`读取用户列表数据失败。`);
     }

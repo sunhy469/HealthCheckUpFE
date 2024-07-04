@@ -61,7 +61,7 @@ let roleid = Number(localStorage.getItem('roleid'))
 const logout = () => {
   localStorage.clear();
   sessionStorage.clear();
-  window.location.reload();
+  window.location.href='https://xixin.smozx.eu.org';
 };
 </script>
 <style scoped>
