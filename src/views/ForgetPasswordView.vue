@@ -109,7 +109,7 @@ const sendCaptcha = async () => {
   proxy.$message.success(`发送验证码成功！`);
 };
 
-const validatePassword = ( value: string, callback: any) => {
+const validatePassword = ( rule: any, value: string, callback: any) => {
   if (value !== forgetPasswordFormState.password) {
     callback(new Error('两次输入的密码不一致！'));
   } else {
@@ -142,7 +142,7 @@ const isDisabled = computed(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 98vh;
   background-color: #f0f2f5;
   background: url("/src/assets/backgroundphoto.jpg") no-repeat;
   background-size: 120% auto;

@@ -1,6 +1,6 @@
 <template>
   <a-layout>
-    <a-layout-sider v-model:collapsed="collapsed" breakpoint="lg" style="height: 100vh; background-color: white">
+    <a-layout-sider v-model:collapsed="collapsed" breakpoint="lg" style="height: 98vh; background-color: white">
       <a-menu v-model:selectedKeys="selectedKeys" mode="inline">
         <a-menu-item key="1" @click="toComponentMethod('/userinfo')">
           <user-outlined />

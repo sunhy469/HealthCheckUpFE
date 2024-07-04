@@ -132,7 +132,7 @@ const sendCaptcha = async () => {
   proxy.$message.success(`发送验证码成功！`);
 };
 
-const validatePassword = (value: string, callback: any) => {
+const validatePassword = ( rule: any, value: string, callback: any) => {
   if (value !== registerFormState.password) {
     callback(new Error('两次输入的密码不一致！'));
   } else {
