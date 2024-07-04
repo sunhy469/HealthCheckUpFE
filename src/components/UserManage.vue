@@ -3,10 +3,9 @@
       title="管理用户"
       hoverable
       headStyle="background-color: #91caff"
-      style="min-height: 350px "
+      style="height: 100vh; overflow-y: auto"
   >
-    <a-table :columns="columns" :data-source="dataSource" :scroll="{ x: 1500, y: 900 }" bordered
-             :pagination="pagination" :loading="loading" @change="handleTableChange">
+    <a-table :columns="columns" :data-source="dataSource" :loading="loading"  bordered @change="handleTableChange">
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'operation'">
           <a-button @click="() => showDrawer(record)" v-if="roleid == 1">显示详细信息</a-button>
@@ -55,7 +54,8 @@
               <a-radio-button value="2">管理员</a-radio-button>
             </a-radio-group>
           </a-form-item>
-         </a-col>
+        </a-col>
+
         <!--<a-col :span="12">
           <a-form-item label="所在科室" name="deptid" v-if="form.roleId=='1'">
             <a-cascader v-model:value="value" :options="options" :load-data="loadData" placeholder="Please select" change-on-select/>
@@ -82,25 +82,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, getCurrentInstance} from 'vue';
-import type { TableColumnsType, TablePaginationConfig, TableProps } from 'ant-design-vue';
-import { usePagination } from 'vue-request';
+import { ref, getCurrentInstance, onMounted, reactive } from 'vue';
+import { message, Modal } from 'ant-design-vue';
+import type { TableColumnsType } from 'ant-design-vue';
 import axios from 'axios';
-import { FilterValue } from 'ant-design-vue/es/table/interface';
+
 const { proxy } = getCurrentInstance() as any;
 
 let roleid = Number(localStorage.getItem('roleid'))
 let access2 = roleid == 2 ? false : true
+
 const columns: TableColumnsType = [
   { title: '用户名', width: 100, dataIndex: 'username', key: 'username', fixed: 'left' },
   { title: '真实姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
   {
     title: '性别', width: 100, dataIndex: 'sex', key: 'sex',
-    // render: (text) => {
-    //   if (text === '0') return '男';
-    //   if (text === '1') return '女';
-    //   return '不愿透露';
-    // },
     filters: [
       { text: '男', value: '0' },
       { text: '女', value: '1' },
@@ -191,82 +187,51 @@ const edit = async () => {
   }
 };
 
-//请求格式
-type APIParams = {
-  results: number;
-  page?: number;
-  sortField?: string;
-  sortOrder?: number;
-  [id: string]: any;
-};
+const dataSource = ref([]); // 数据源
+const loading = ref(true); // 加载状态
 
-type APIResult = {
-  data: {
-    id: string;
-    username: string;
-    name: string;
-    sex: string;
-    mobile: string;
-    roleId: string;
-    createTime: string;
-    lastLoginTime: string;
-  }[];
-};
-
-const {
-  data: dataSource,
-  run,
-  loading,
-  current,
-  pageSize,
-} = usePagination(queryData, {
-  pagination: {
-    currentKey: 'page',
-    pageSizeKey: 'results',
-  },
-});
-
-async function queryData(params: APIParams) {
+const fetchData = async () => {
   try {
     let response;
     if (roleid == 1) {
-      response = await axios.get<APIResult>('/user/getpatient', { params });
+      response = await axios.get('/user/getpatient', { params: { id: localStorage.getItem('id'), roleId: roleid } });
     } else {
-      response = await axios.get<APIResult>('/user/getall', { params });
+      response = await axios.get('/user/getall', { params: { id: localStorage.getItem('id'), roleId: roleid } });
     }
-    return response.data.data.map(item => ({
-      id: item.id,
-      username: item.username,
-      name: item.name,
-      sex: item.sex,
-      mobile: item.mobile,
-      roleId: item.roleId,
-      createTime: item.createTime,
-      lastLoginTime: item.lastLoginTime || 'N/A', // 假设如果没有 lastLoginTime，就填充为 'N/A'
-    }));
+    if (response.data.code === 1) {
+      dataSource.value = response.data.data.map((item: any) => ({
+        id: item.id,
+        username: item.username,
+        name: item.name,
+        sex: item.sex,
+        mobile: item.mobile,
+        roleId: item.roleId,
+        createTime: item.createTime,
+        lastLoginTime: item.lastLoginTime || 'N/A',
+      }));
+    } else {
+      proxy.$message.warning(`读取用户列表数据失败。`);
+    }
   } catch (error) {
     proxy.$message.warning(`系统繁忙。请稍后。`);
     console.log("error:", error);
-    return [];
+  } finally {
+    loading.value = false;
   }
-}
-
-//表格筛选变化
-const pagination = computed(() => ({
-  total: 200,
-  current: current.value,
-  pageSize: pageSize.value,
-}));
-
-const handleTableChange: TableProps<any>['onChange'] = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-) => {
-  const { pageSize = 10, current = 1 } = pagination;
-  run({
-    results: pageSize,
-    page: current,
-    ...filters,
-  });
 };
+
+const handleTableChange = (pagination: any, filters: any, sorter: any) => {
+  fetchData();
+};
+
+onMounted(() => {
+  fetchData();
+});
+
 </script>
+
+<style scoped>
+.box {
+  margin: 20px;
+}
+</style>
