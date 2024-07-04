@@ -3,7 +3,7 @@
         title="管理用户"
         hoverable
         headStyle="background-color: #91caff"
-        style="height: 100vh; overflow-y: auto"
+        style="height: 98vh; overflow-y: auto"
     >
       <a-table :columns="columns" :data-source="dataSource" :loading="loading"  bordered @change="handleTableChange">
         <template #bodyCell="{ column, record }">
