@@ -97,17 +97,10 @@
     { title: '真实姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
     {
       title: '性别', width: 100, dataIndex: 'sex', key: 'sex',
-      filters: [
-        { text: '男', value: '0' },
-        { text: '女', value: '1' },
-        { text: '不愿透露', value: '2' }
-      ],
-      filterMode: 'tree',
-      onFilter: (value, record) => record.sex === value,
     },
     { title: '联系方式', dataIndex: 'mobile', key: 'mobile', width: 150 },
-    { title: '注册日期', dataIndex: 'createTime', key: 'createTime', width: 150, sorter: true },
-    { title: '上次登录日期', dataIndex: 'lastLoginTime', key: 'lastLoginTime', width: 150, sorter: true },
+    { title: '注册日期', dataIndex: 'createTime', key: 'createTime', width: 150 },
+    { title: '上次登录日期', dataIndex: 'lastLoginTime', key: 'lastLoginTime', width: 150 },
     {
       title: '操作',
       key: 'operation',
