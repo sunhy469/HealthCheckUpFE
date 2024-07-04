@@ -199,11 +199,12 @@
         response = await axios.get('/user/getall', { params: { id: localStorage.getItem('id'), roleId: roleid } });
       }
       if (response.data.code === 1) {
+        console.log( response.data.data)
         dataSource.value = response.data.data.map((item: any) => ({
           id: item.id,
           username: item.username,
           name: item.name,
-          sex: item.sex,
+          sex: item.sex === "0"? '男':item.sex === "1" ? '女':'不愿透露',
           mobile: item.mobile,
           roleId: item.roleId,
           createTime: item.createTime,
